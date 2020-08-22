@@ -24,8 +24,8 @@ services:
     restart: always
     working_dir: /${BACKEND_WORKING_DIR}
     volumes:
-      - ./:/${BACKEND_WORKING_DIR}
-      # - /${MS_GATEWAY_WORKING_DIR}/node_modules
+      - ./packages/backend:/${BACKEND_WORKING_DIR}
+      - /${BACKEND_WORKING_DIR}/node_modules
     ports:
       - "3000:3000"
       - "9229:9229"
@@ -35,9 +35,9 @@ services:
       - START_TYPE
       - NODE_ENV
       - BACKEND_WORKING_DIR
-    # build:
-    #   context: .
-    command: npm run start:${START_TYPE}
+    build:
+      context: ./packages/backend
+    command: yarn run start:${START_TYPE}
 
 networks:
   # frontend:
