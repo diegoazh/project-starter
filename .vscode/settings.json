@@ -1,0 +1,32 @@
+{
+  "editor.rulers": [
+    100
+  ],
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "editor.trimAutoWhitespace": true,
+  "editor.formatOnSave": false,
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.svn": true,
+    "**/CVS": true,
+    "**/dist": true,
+    "**/.idea": true,
+    "packages/**/.vscode": true,
+    "packages/**/node_modules": false,
+    "packages/**/.quasar": true,
+  },
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#700000",
+    "titleBar.inactiveBackground": "#693232",
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/.hg/store/**": true
+  }
+}
