@@ -11,7 +11,7 @@ parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaVersion: 11
   sourceType: module
-  project: './package/backend/tsconfig.json'
+  project: './packages/backend/tsconfig.json'
 plugins:
   - '@typescript-eslint'
   - 'jest'
