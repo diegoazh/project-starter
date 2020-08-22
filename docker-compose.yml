@@ -24,7 +24,7 @@ services:
     restart: always
     working_dir: /${BACKEND_WORKING_DIR}
     volumes:
-      - .:/${BACKEND_WORKING_DIR}
+      - ./:/${BACKEND_WORKING_DIR}
       # - /${MS_GATEWAY_WORKING_DIR}/node_modules
     ports:
       - "3000:3000"
@@ -40,5 +40,5 @@ services:
     command: npm run start:${START_TYPE}
 
 networks:
-  frontend:
+  # frontend:
   backend:
