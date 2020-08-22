@@ -2,8 +2,8 @@
 db
 dist
 node_modules
-packages/**/node_modules
 packages/**/dist
+packages/**/node_modules
 
 #Files
 .DS_Store
