@@ -5,5 +5,19 @@
   "main": "index.js",
   "repository": "git@github.com:diegoazh/project-starter.git",
   "author": "Diego A. Zapata Häntsch <diegoazh2003@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "",
+    "postinstall": "lerna bootstrap",
+    "release": "lerna version --conventional-commits",
+    "start": "",
+    "test": ""
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
+    "@commitlint/config-lerna-scopes": "^9.1.2",
+    "husky": "^4.2.5",
+    "lerna": "^3.22.1"
+  }
 }

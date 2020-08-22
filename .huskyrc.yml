@@ -1,0 +1,4 @@
+hooks:
+  commit-msg: commitlint -E HUSKY_GIT_PARAMS
+  pre-commit: lerna run lint-staged --parallel && lerna run build --parallel
+  pre-push: lerna run test --parallel

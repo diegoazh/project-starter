@@ -1,3 +1,5 @@
+const {utils: {getPackages}} = require('@commitlint/config-lerna-scopes');
+
 module.exports = {
   extends: [
     '@commitlint/config-conventional',
@@ -5,6 +7,8 @@ module.exports = {
   rules: {
     'type-case': [2, 'always', 'lowerCase'],
     'type-empty': [2, 'never'],
+    'scope-enum': async ctx =>
+      [2, 'always', [...(await getPackages(ctx)), 'root', 'all', 'release']],
     'scope-case': [2, 'always', 'lowerCase'],
     'scope-empty': [2, 'never'],
     'subject-case': [2, 'always', 'lowerCase'],

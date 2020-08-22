@@ -1,0 +1,8 @@
+# Folders
+dist
+node_modules
+packages/**/node_modules
+packages/**/dist
+
+#Files
+.DS_Store
