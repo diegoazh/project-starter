@@ -33,7 +33,7 @@
 ```bash
 $ npm install
 # you should have docker installed previously
-$ docker-compose up
+$ docker-compose up --build -V
 ```
 
 ## Running the app
