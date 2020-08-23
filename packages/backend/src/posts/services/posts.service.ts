@@ -1,35 +1,60 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/shared/services/prisma.service';
+import { FindManyPostArgs, Post, Subset } from '@prisma/client';
+import { PrismaService } from '../../shared/services/prisma.service';
+import { CreatePostDto } from '../dtos/create-post.dto';
+import { PatchPostDto } from '../dtos/patch-post.dto';
+import { UpdatePostDto } from '../dtos/update-post.dto';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  find() {
-    return this.prisma.post.findMany();
+  find(query?: Subset<FindManyPostArgs, FindManyPostArgs>): Promise<Post[]> {
+    return this.prisma.post.findMany(query);
   }
 
-  findById() {
-    return this.prisma.post.findOne();
+  findById(id: number): Promise<Post> {
+    return this.prisma.post.findOne({ where: { id } });
   }
 
-  count() {
-    return this.prisma.post.count();
+  count(
+    query?: Pick<
+      FindManyPostArgs,
+      'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
+    >,
+  ): Promise<number> {
+    return this.prisma.post.count(query);
   }
 
-  create() {
-    return this.prisma.post.create();
+  create(post: CreatePostDto): Promise<Post> {
+    return this.prisma.post.create({ data: { ...post, author: null } });
   }
 
-  update() {
-    return this.prisma.post.update();
+  async update(id: number, post: UpdatePostDto): Promise<Post> {
+    const savedPost = await this.prisma.post.findOne({ where: { id } });
+    const { title, content, type, published } = post;
+
+    savedPost.title = title;
+    savedPost.content = content;
+    savedPost.type = type;
+    savedPost.published = published;
+
+    return this.prisma.post.update({ where: { id }, data: { ...savedPost } });
   }
 
-  updateProperty() {
-    return this.prisma.post.update();
+  async updateProperty(id: number, post: PatchPostDto): Promise<Post> {
+    const savedPost = await this.prisma.post.findOne({ where: { id } });
+    const { title, content, type, published } = post;
+
+    savedPost.title = title || savedPost.title;
+    savedPost.content = content || savedPost.content;
+    savedPost.type = type || savedPost.type;
+    savedPost.published = published || savedPost.published;
+
+    return this.prisma.post.update({ where: { id }, data: { ...savedPost } });
   }
 
-  remove() {
-    return this.prisma.post.delete();
+  remove(id: number): Promise<Post> {
+    return this.prisma.post.delete({ where: { id } });
   }
 }

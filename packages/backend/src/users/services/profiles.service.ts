@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FindManyProfileArgs, Profile, Subset } from '@prisma/client';
-import { PrismaService } from 'src/shared/services/prisma.service';
+import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateProfileDto } from '../dtos/create-profile.dto';
 import { PatchProfileDto } from '../dtos/patch-profile.dto';
 import { UpdateProfileDto } from '../dtos/update-profile.dto';
@@ -9,7 +9,9 @@ import { UpdateProfileDto } from '../dtos/update-profile.dto';
 export class ProfilesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  find(query?: Subset<FindManyProfileArgs, FindManyProfileArgs>): Promise<Profile[]> {
+  find(
+    query?: Subset<FindManyProfileArgs, FindManyProfileArgs>,
+  ): Promise<Profile[]> {
     return this.prisma.profile.findMany(query);
   }
 
@@ -38,7 +40,10 @@ export class ProfilesService {
     savedProfile.firstName = firstName;
     savedProfile.lastName = lastName;
 
-    return this.prisma.profile.update({ where: { id }, data: { ...savedProfile } });
+    return this.prisma.profile.update({
+      where: { id },
+      data: { ...savedProfile },
+    });
   }
 
   async updateProperty(id: number, profile: PatchProfileDto): Promise<Profile> {
@@ -49,7 +54,10 @@ export class ProfilesService {
     savedProfile.firstName = firstName || savedProfile.firstName;
     savedProfile.lastName = lastName || savedProfile.lastName;
 
-    return this.prisma.profile.update({ where: { id }, data: { ...savedProfile } });
+    return this.prisma.profile.update({
+      where: { id },
+      data: { ...savedProfile },
+    });
   }
 
   remove(id: number): Promise<Profile> {

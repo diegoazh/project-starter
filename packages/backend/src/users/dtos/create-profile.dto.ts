@@ -1,4 +1,12 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateProfileDto {
   @MaxLength(10000)
@@ -19,6 +27,7 @@ export class CreateProfileDto {
   @IsOptional()
   lastName?: string;
 
+  @IsPositive()
   @IsNumber()
   @IsNotEmpty()
   userId: number;

@@ -1,4 +1,19 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import { FindManyPostArgs, Subset } from '@prisma/client';
+import { CreatePostDto } from '../dtos/create-post.dto';
+import { PatchPostDto } from '../dtos/patch-post.dto';
+import { UpdatePostDto } from '../dtos/update-post.dto';
+import { PostResponse } from '../responses/post.response';
 import { PostsService } from '../services/posts.service';
 
 @Controller('posts')
@@ -6,37 +21,51 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  find() {
-    return this.postsService.find();
+  find(
+    @Query() query?: Subset<FindManyPostArgs, FindManyPostArgs>,
+  ): Promise<PostResponse[]> {
+    return this.postsService.find(query);
   }
 
   @Get(':id')
-  findById() {
-    return this.postsService.findById();
+  findById(@Param('id') id: number): Promise<PostResponse> {
+    return this.postsService.findById(id);
   }
 
   @Get('count')
-  count() {
-    return this.postsService.count();
+  count(
+    @Query()
+    query: Pick<
+      FindManyPostArgs,
+      'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
+    >,
+  ): Promise<number> {
+    return this.postsService.count(query);
   }
 
   @Post()
-  create() {
-    return this.postsService.create();
+  create(@Body() post: CreatePostDto): Promise<PostResponse> {
+    return this.postsService.create(post);
   }
 
   @Put(':id')
-  update() {
-    return this.postsService.update();
+  update(
+    @Param('id') id: number,
+    @Body() post: UpdatePostDto,
+  ): Promise<PostResponse> {
+    return this.postsService.update(id, post);
   }
 
   @Patch(':id')
-  updateProperty() {
-    return this.postsService.updateProperty();
+  updateProperty(
+    @Param('id') id: number,
+    post: PatchPostDto,
+  ): Promise<PostResponse> {
+    return this.postsService.updateProperty(id, post);
   }
 
   @Delete(':id')
-  remove() {
-    this.postsService.remove();
+  remove(@Param('id') id: number): Promise<PostResponse> {
+    return this.postsService.remove(id);
   }
 }

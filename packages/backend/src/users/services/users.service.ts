@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { FindManyUserArgs, Subset, User } from '@prisma/client';
-import { PrismaService } from 'src/shared/services/prisma.service';
+import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
