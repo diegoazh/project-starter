@@ -7,12 +7,15 @@
   "author": "Diego A. Zapata Häntsch <diegoazh2003@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "",
+    "build": "lerna run build",
     "lint": "lerna run lint",
     "postinstall": "lerna bootstrap",
+    "prisma:generate": "lerna run prisma:generate",
     "release": "lerna version --conventional-commits",
-    "start": "",
-    "test": ""
+    "start": "lerna run start",
+    "start:debug": "lerna run start:debug",
+    "start:dev": "lerna run start:dev",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
