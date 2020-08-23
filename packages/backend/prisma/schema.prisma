@@ -21,16 +21,18 @@ model Post {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
+
 model Profile {
-  id        Int      @default(autoincrement()) @id
+  id        Int       @default(autoincrement()) @id
   bio       String?
-  firsName  String?  @map("first_name")
-  lastName  String?  @map("last_name")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int      @unique @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  firstName  String?  @map("first_name")
+  lastName  String?   @map("last_name")
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @unique @map("user_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 }
+
 model User {
   id          Int      @default(autoincrement()) @id
   email       String   @unique
