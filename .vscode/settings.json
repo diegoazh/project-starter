@@ -6,6 +6,9 @@
   "editor.tabSize": 2,
   "editor.trimAutoWhitespace": true,
   "editor.formatOnSave": false,
+  "eslint.workingDirectories": [
+    { "directory": "./packages/backend", "changeProcessCWD": true }
+  ],
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.git": true,

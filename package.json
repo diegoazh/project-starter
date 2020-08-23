@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "",
+    "lint": "lerna run lint",
     "postinstall": "lerna bootstrap",
     "release": "lerna version --conventional-commits",
     "start": "",
