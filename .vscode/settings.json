@@ -31,5 +31,8 @@
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/.hg/store/**": true
-  }
+  },
+  "jest.pathToJest": "./node_modules/.bin/jest",
+  "jest.pathToConfig": "./jest.config.js",
+  "jest.disabledWorkspaceFolders": ["."]
 }

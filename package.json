@@ -15,13 +15,14 @@
     "start": "lerna run start",
     "start:debug": "lerna run start:debug",
     "start:dev": "lerna run start:dev",
-    "test": "lerna run test"
+    "test": "lerna run test --parallel --"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^9.1.2",
     "@commitlint/config-lerna-scopes": "^9.1.2",
     "husky": "^4.2.5",
+    "jest": "^26.4.2",
     "lerna": "^3.22.1"
   }
 }
