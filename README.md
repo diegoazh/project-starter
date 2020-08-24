@@ -1,8 +1,8 @@
 # Project starter
 
-[![build](https://github.com/diegoazh/gmap-vue/workflows/build/badge.svg)](https://github.com/diegoazh/gmap-vue/actions?query=workflow%3Abuild)
-[![test](https://github.com/diegoazh/gmap-vue/workflows/test/badge.svg)](https://github.com/diegoazh/gmap-vue/actions?query=workflow%3Atest)
-[![publish](https://github.com/diegoazh/gmap-vue/workflows/publish/badge.svg)](https://github.com/diegoazh/gmap-vue/actions?query=workflow%3Apublish)
+[![build](https://github.com/diegoazh/project-starter/workflows/build/badge.svg)](https://github.com/diegoazh/project-starter/actions?query=workflow%3Abuild)
+[![test](https://github.com/diegoazh/project-starter/workflows/test/badge.svg)](https://github.com/diegoazh/project-starter/actions?query=workflow%3Atest)
+[![publish](https://github.com/diegoazh/project-starter/workflows/publish/badge.svg)](https://github.com/diegoazh/project-starter/actions?query=workflow%3Apublish)
 
 ## Description
 
