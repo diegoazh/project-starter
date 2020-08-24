@@ -10,7 +10,7 @@ This is a simple starter project for web applications or blogs that requires:
 
 - Frontend: Built on VueJs with Vuetify
 - Admin: Built on VueJs with Vuetify
-- Backend: Build with NestJs
+- Backend: Built with NestJs
   - DB tool: Prisma
 
 ## Main goal
