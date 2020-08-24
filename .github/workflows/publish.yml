@@ -14,8 +14,10 @@ jobs:
           node-version: 10
       - name: Install dependencies
         run: yarn
+      - name: Prisma generate
+        run: yarn run prisma:generate
       - name: Build monorepo
-        run: npm run build
+        run: yarn run build
       - name: Run lint
         run: yarn run lint
       - name: Run tests
@@ -33,8 +35,8 @@ jobs:
           git checkout master
       - name: Run lerna version
         run: yarn run release
-      # - name: Publish new version to npm
-      #   uses: JS-DevTools/npm-publish@v1
+      # - name: Publish new version to yarn
+      #   uses: JS-DevTools/yarn-publish@v1
       #   with:
       #     token: ${{ secrets.NPM_AUTH_TOKEN }}
       #     package: ./packages/gmap-vue/package.json
