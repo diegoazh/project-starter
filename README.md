@@ -51,10 +51,16 @@ $ yarn run prisma:generate
 
 **Note:** *when you install new packages this should be updated automatically but some times you need to delete all volumes on docker and run again the command `docker-compose up --build -V`, or go inside the docker container en run the installation there too, because the `node_modules` folder inside the docker container is independent from your `node_modules` folder in the host machine.*
 
+## Debug
+
+This project use **VSCode** to develop and debug, it is configured to allow your to debug the code
+inside the docker container using the VSCode debugger tool.
+
 ## Dependencies
 
 |Name|Version|
 |----|-------|
+|*yarn*|[![yarn](https://img.shields.io/badge/version-1.22.4-blue)](https://yarnpkg.com/getting-started)|
 |*lerna*|[![npm version](https://badge.fury.io/js/lerna.svg)](https://badge.fury.io/js/lerna)|
 |*commitlint*|[![npm version](https://badge.fury.io/js/commitlint.svg)](https://badge.fury.io/js/commitlint)|
 |*husky*|[![npm version](https://badge.fury.io/js/husky.svg)](https://badge.fury.io/js/husky)|
