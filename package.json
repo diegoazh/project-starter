@@ -11,7 +11,7 @@
     "lint": "lerna run lint",
     "postinstall": "lerna bootstrap",
     "prisma:generate": "lerna run prisma:generate",
-    "release": "lerna version --conventional-commits --yes",
+    "release": "lerna version --conventional-commits --yes -m \"chore(release): publish %s\"",
     "start": "lerna run start",
     "start:debug": "lerna run start:debug",
     "start:dev": "lerna run start:dev",

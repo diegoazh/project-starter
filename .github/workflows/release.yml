@@ -1,4 +1,4 @@
-name: publish
+name: release
 on:
   push:
     branches:
@@ -29,7 +29,7 @@ jobs:
           token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Update origin push URI
         run: |
-          git remote set-url origin "https://${{ secrets.GH_TOKEN_LERNA }}@github.com/${{ secrets.GH_USER }}/${{ secrets.GH_REPOSITORY }}.git" > /dev/null 2>&1
+          git remote set-url origin "https://${{ secrets.GH_TOKEN_PROJECT_STARTER }}@github.com/${{ secrets.GH_USER }}/${{ secrets.GH_REPOSITORY }}.git" > /dev/null 2>&1
           git checkout master
       - name: Run lerna version
         run: yarn run release
