@@ -30,4 +30,4 @@ The main goal of this starter project is make the first steps of the development
 
 You can find the test coverage of each package on the README file of each package.
 
-[**Backend readme**](/packages/backend/README.md#coverage)
+[**Backend readme**](/packages/backend/README.md#test-coverage)
