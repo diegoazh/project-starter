@@ -34,30 +34,36 @@ export class ProfilesService {
 
   async update(id: number, profile: UpdateProfileDto): Promise<Profile> {
     const savedProfile = await this.prisma.profile.findOne({ where: { id } });
-    const { bio, firstName, lastName } = profile;
-
-    savedProfile.bio = bio;
-    savedProfile.firstName = firstName;
-    savedProfile.lastName = lastName;
 
     return this.prisma.profile.update({
       where: { id },
-      data: { ...savedProfile },
+      data: { ...savedProfile, ...profile },
     });
   }
 
   async updateProperty(id: number, profile: PatchProfileDto): Promise<Profile> {
     const savedProfile = await this.prisma.profile.findOne({ where: { id } });
-    const { bio, firstName, lastName } = profile;
 
-    savedProfile.bio = bio || savedProfile.bio;
-    savedProfile.firstName = firstName || savedProfile.firstName;
-    savedProfile.lastName = lastName || savedProfile.lastName;
+    const mustBeUpdated = Object.keys(profile).reduce(
+      (needsUpdate, property) => {
+        if (savedProfile[property] !== profile[property]) {
+          savedProfile[property] = profile[property];
+          return true;
+        }
 
-    return this.prisma.profile.update({
-      where: { id },
-      data: { ...savedProfile },
-    });
+        return needsUpdate;
+      },
+      false,
+    );
+
+    if (mustBeUpdated) {
+      return this.prisma.profile.update({
+        where: { id },
+        data: { ...savedProfile },
+      });
+    }
+
+    return savedProfile;
   }
 
   remove(id: number): Promise<Profile> {

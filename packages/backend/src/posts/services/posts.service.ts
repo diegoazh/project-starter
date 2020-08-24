@@ -32,26 +32,34 @@ export class PostsService {
 
   async update(id: number, post: UpdatePostDto): Promise<Post> {
     const savedPost = await this.prisma.post.findOne({ where: { id } });
-    const { title, content, type, published } = post;
 
-    savedPost.title = title;
-    savedPost.content = content;
-    savedPost.type = type;
-    savedPost.published = published;
-
-    return this.prisma.post.update({ where: { id }, data: { ...savedPost } });
+    return this.prisma.post.update({
+      where: { id },
+      data: { ...savedPost, ...post },
+    });
   }
 
   async updateProperty(id: number, post: PatchPostDto): Promise<Post> {
     const savedPost = await this.prisma.post.findOne({ where: { id } });
-    const { title, content, type, published } = post;
 
-    savedPost.title = title || savedPost.title;
-    savedPost.content = content || savedPost.content;
-    savedPost.type = type || savedPost.type;
-    savedPost.published = published || savedPost.published;
+    const mustBeUpdated = Object.keys(post).reduce((needsUpdate, property) => {
+      if (savedPost[property] !== post[property]) {
+        if (post[property] === '' && property !== 'content') {
+          return needsUpdate;
+        }
 
-    return this.prisma.post.update({ where: { id }, data: { ...savedPost } });
+        savedPost[property] = post[property];
+        return true;
+      }
+
+      return needsUpdate;
+    }, false);
+
+    if (mustBeUpdated) {
+      return this.prisma.post.update({ where: { id }, data: { ...savedPost } });
+    }
+
+    return savedPost;
   }
 
   remove(id: number): Promise<Post> {

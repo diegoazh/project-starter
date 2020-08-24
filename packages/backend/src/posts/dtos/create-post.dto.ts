@@ -23,7 +23,7 @@ export class CreatePostDto {
   title: string;
 
   @MaxLength(2000000)
-  @MinLength(5)
+  @MinLength(10)
   @IsString()
   @IsOptional()
   content?: string;

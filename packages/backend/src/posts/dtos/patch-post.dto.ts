@@ -2,7 +2,6 @@ import { PostType } from '@prisma/client';
 import {
   IsBoolean,
   IsEnum,
-  IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
@@ -13,11 +12,11 @@ export class PatchPostDto {
   @MaxLength(80)
   @MinLength(5)
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   title?: string;
 
   @MaxLength(2000000)
-  @MinLength(5)
+  @MinLength(10)
   @IsString()
   @IsOptional()
   content?: string;

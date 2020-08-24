@@ -3,7 +3,6 @@ import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
-  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -17,16 +16,16 @@ export class UpdatePostDto {
   title: string;
 
   @MaxLength(2000000)
-  @MinLength(5)
+  @MinLength(10)
   @IsString()
-  @IsOptional()
-  content?: string;
+  @IsNotEmpty()
+  content: string;
 
   @IsEnum(PostType)
-  @IsOptional()
+  @IsNotEmpty()
   type: PostType;
 
   @IsBoolean()
-  @IsOptional()
+  @IsNotEmpty()
   published: boolean;
 }

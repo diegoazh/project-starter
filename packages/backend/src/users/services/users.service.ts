@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { FindManyUserArgs, Subset, User } from '@prisma/client';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
@@ -33,28 +33,29 @@ export class UsersService {
   async update(id: number, user: UpdateUserDto): Promise<User> {
     const savedUser = await this.prisma.user.findOne({ where: { id } });
 
-    if (savedUser.password === user.oldPassword) {
-      savedUser.email = user.email;
-      savedUser.username = user.username;
-      savedUser.password = user.newPassword;
-      return this.prisma.user.update({ where: { id }, data: { ...savedUser } });
-    }
-
-    throw new BadRequestException('The current password does not match');
+    return this.prisma.user.update({
+      where: { id },
+      data: { ...savedUser, ...user },
+    });
   }
 
   async updateProperty(id: number, user: PatchUserDto): Promise<User> {
     const savedUser = await this.prisma.user.findOne({ where: { id } });
 
-    if (savedUser.password === user.oldPassword) {
-      const { email, newPassword: password, username } = user;
-      savedUser.email = email || savedUser.email;
-      savedUser.username = username || savedUser.username;
-      savedUser.password = password || savedUser.password;
+    const mustBeUpdated = Object.keys(user).reduce((needsUpdate, property) => {
+      if (user[property] && savedUser[property] !== user[property]) {
+        savedUser[property] = user[property];
+        return true;
+      }
+
+      return needsUpdate;
+    }, false);
+
+    if (mustBeUpdated) {
       return this.prisma.user.update({ where: { id }, data: { ...savedUser } });
     }
 
-    throw new BadRequestException('The current password does not match');
+    return savedUser;
   }
 
   remove(id: number): Promise<User> {
