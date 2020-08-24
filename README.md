@@ -15,7 +15,7 @@ This is a simple starter project for web applications or blogs that requires:
 
 ## Main goal
 
-The main goal of this starter project is make the first steps of the development faster.
+The main goal of this starter project is make faster the first steps of the development.
 
 ## Dependencies
 
