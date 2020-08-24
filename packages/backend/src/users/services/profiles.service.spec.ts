@@ -159,6 +159,34 @@ describe('ProfilesService', () => {
     expect(prisma.profile.update).toHaveBeenCalledWith(expectedArgs);
   });
 
+  it('should not call prisma profile.update when any changes are sent to updateProperty method', async () => {
+    // Arrange
+    const oldProfile = {
+      id: 1,
+      bio:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean finibus faucibus mauris porta rutrum. Nam eu cursus urna. Aliquam at porttitor purus, ac ultrices eros. Sed consectetur orci fringilla, fermentum.',
+      firstName: 'John',
+      lastName: 'Doe',
+      userId: 1,
+      createdAt: '12/12/12T10:30:23',
+      updatedAt: '12/12/12T10:30:23',
+    };
+    const profile: PatchProfileDto = {
+      firstName: 'John',
+      lastName: 'Doe',
+    };
+    const id = 10;
+
+    (prisma.profile.findOne as any).mockReturnValue(oldProfile);
+
+    // Act
+    const result = await service.updateProperty(id, profile);
+
+    // Assert
+    expect(prisma.profile.update).not.toHaveBeenCalled();
+    expect(result).toEqual(oldProfile);
+  });
+
   it('should call prisma profile.delete with arguments when call remove method', async () => {
     // Arrange
     const id = 5;
