@@ -27,12 +27,14 @@
     "@nestjs/common": "^7.4.2",
     "@nestjs/core": "^7.4.2",
     "@nestjs/platform-express": "^7.4.2",
+    "@nestjs/swagger": "^4.6.0",
     "@prisma/client": "2.5.1",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.2"
+    "rxjs": "^6.6.2",
+    "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.4.1",
