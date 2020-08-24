@@ -56,11 +56,16 @@ $ yarn run prisma:generate
 This project use **VSCode** to develop and debug, it is configured to allow you to debug the code
 inside the docker container using the VSCode debugger tool.
 
-## Dependencies
+## Package manager
 
 |Name|Version|
 |----|-------|
 |*yarn*|[![yarn](https://img.shields.io/badge/version-1.22.4-blue)](https://yarnpkg.com/getting-started)|
+
+## Dependencies
+
+|Name|Version|
+|----|-------|
 |*lerna*|[![npm version](https://badge.fury.io/js/lerna.svg)](https://badge.fury.io/js/lerna)|
 |*commitlint*|[![npm version](https://badge.fury.io/js/commitlint.svg)](https://badge.fury.io/js/commitlint)|
 |*husky*|[![npm version](https://badge.fury.io/js/husky.svg)](https://badge.fury.io/js/husky)|
