@@ -12,7 +12,7 @@ module.exports = {
     'scope-case': [2, 'always', 'lowerCase'],
     'scope-empty': [2, 'never'],
     'subject-case': [2, 'always', 'lowerCase'],
-    'subject-min-length': [2, 'always', 15],
+    'subject-min-length': [2, 'always', 10],
     'subject-max-length': [2, 'always', 75],
     'header-case': [2, 'always', 'lowerCase'],
     'body-leading-blank': [2, 'always'],
