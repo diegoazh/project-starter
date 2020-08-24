@@ -25,3 +25,9 @@ The main goal of this starter project is make the first steps of the development
 |*commitlint*|[![npm version](https://badge.fury.io/js/commitlint.svg)](https://badge.fury.io/js/commitlint)|
 |*husky*|[![npm version](https://badge.fury.io/js/husky.svg)](https://badge.fury.io/js/husky)|
 |*lint-staged*|[![npm version](https://badge.fury.io/js/lint-staged.svg)](https://badge.fury.io/js/lint-staged)|
+
+## Test coverage
+
+You can find the test coverage of each package on the README file of each package.
+
+[**Backend readme**](/packages/backend/README.md#coverage)
