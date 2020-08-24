@@ -19,12 +19,12 @@ The main goal of this starter project is make faster the first steps of the deve
 
 ## How to run this project
 
-[Install docker](https://www.docker.com/products/docker-desktop) in you machine, clone the project and run the following commands.
+[Install docker](https://www.docker.com/products/docker-desktop) on you machine, clone the project and run the following commands.
 
 ```bash
 $ git clone https://github.com/diegoazh/project-starter.git
 
-$ npm i
+$ yarn
 
 $ docker-compose up --build -V
 ```
