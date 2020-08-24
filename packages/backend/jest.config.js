@@ -15,4 +15,5 @@ module.exports = {
       statements: 80,
     },
   },
+  coverageReporters: ['json-summary', 'text', 'lcov', 'clover'],
 };
