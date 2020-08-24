@@ -53,7 +53,7 @@ $ yarn run prisma:generate
 
 ## Debug
 
-This project use **VSCode** to develop and debug, it is configured to allow your to debug the code
+This project use **VSCode** to develop and debug, it is configured to allow you to debug the code
 inside the docker container using the VSCode debugger tool.
 
 ## Dependencies
