@@ -15,7 +15,8 @@
     "start": "lerna run start",
     "start:debug": "lerna run start:debug",
     "start:dev": "lerna run start:dev",
-    "test": "lerna run test --parallel --"
+    "test": "lerna run test --parallel --",
+    "test:cov": "lerna run test:cov --parallel --"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
