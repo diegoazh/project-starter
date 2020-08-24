@@ -1,4 +1,10 @@
 {
+  "command": {
+    "version": {
+      "message": "chore(release): publish release"
+    }
+  },
+  "conventionalCommits": true,
   "ignoreChanges": [
     "**/__fixtures__/**",
     "**/__tests__/**",
