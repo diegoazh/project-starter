@@ -199,6 +199,8 @@ describe('PostsService', () => {
       authorId: 1,
     };
     const post: PatchPostDto = {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis.',
       content: '',
     };
     const id = 10;
