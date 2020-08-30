@@ -1,6 +1,6 @@
-# Migration `20200822124850-initial_migration`
+# Migration `20200830172802-initial_migration`
 
-This migration has been generated at 8/22/2020, 12:48:50 PM.
+This migration has been generated at 8/30/2020, 5:28:02 PM.
 You can check out the [state of the schema](./schema.prisma) after the migration.
 
 ## Database Steps
@@ -33,6 +33,7 @@ PRIMARY KEY (`id`)
 CREATE TABLE `backend`.`User` (
 `id` int  NOT NULL  AUTO_INCREMENT,
 `email` varchar(191)  NOT NULL ,
+`password` varchar(191)  NOT NULL ,
 `username` varchar(191)  ,
 `created_at` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 `updated_at` datetime(3)  NOT NULL ,
@@ -49,10 +50,10 @@ ALTER TABLE `backend`.`Profile` ADD FOREIGN KEY (`user_id`) REFERENCES `backend`
 
 ```diff
 diff --git schema.prisma schema.prisma
-migration ..20200822124850-initial_migration
+migration ..20200830172802-initial_migration
 --- datamodel.dml
 +++ datamodel.dml
-@@ -1,0 +1,47 @@
+@@ -1,0 +1,50 @@
 +// This is your Prisma schema file,
 +// learn more about it in the docs: https://pris.ly/d/prisma-schema
 +
@@ -76,19 +77,22 @@ migration ..20200822124850-initial_migration
 +  createdAt DateTime @default(now()) @map("created_at")
 +  updatedAt DateTime @updatedAt @map("updated_at")
 +}
++
 +model Profile {
-+  id        Int      @default(autoincrement()) @id
++  id        Int       @default(autoincrement()) @id
 +  bio       String?
-+  firsName  String?  @map("first_name")
-+  lastName  String?  @map("last_name")
-+  user      User     @relation(fields: [userId], references: [id])
-+  userId    Int      @unique @map("user_id")
-+  createdAt DateTime @default(now()) @map("created_at")
-+  updatedAt DateTime @updatedAt @map("updated_at")
++  firstName  String?  @map("first_name")
++  lastName  String?   @map("last_name")
++  user      User      @relation(fields: [userId], references: [id])
++  userId    Int       @unique @map("user_id")
++  createdAt DateTime  @default(now()) @map("created_at")
++  updatedAt DateTime  @updatedAt @map("updated_at")
 +}
++
 +model User {
 +  id          Int      @default(autoincrement()) @id
 +  email       String   @unique
++  password    String
 +  username    String?
 +  posts       Post[]
 +  profile     Profile?

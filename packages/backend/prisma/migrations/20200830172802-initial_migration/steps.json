@@ -391,7 +391,7 @@
     {
       "tag": "CreateField",
       "model": "Profile",
-      "field": "firsName",
+      "field": "firstName",
       "type": "String",
       "arity": "Optional"
     },
@@ -401,7 +401,7 @@
         "path": {
           "tag": "Field",
           "model": "Profile",
-          "field": "firsName"
+          "field": "firstName"
         },
         "directive": "map"
       }
@@ -413,7 +413,7 @@
         "path": {
           "tag": "Field",
           "model": "Profile",
-          "field": "firsName"
+          "field": "firstName"
         },
         "directive": "map"
       },
@@ -705,6 +705,13 @@
         },
         "directive": "unique"
       }
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "password",
+      "type": "String",
+      "arity": "Required"
     },
     {
       "tag": "CreateField",
