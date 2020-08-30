@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { FindManyProfileArgs, Subset } from '@prisma/client';
 import { CreateProfileDto } from '../dtos/create-profile.dto';
 import { PatchProfileDto } from '../dtos/patch-profile.dto';
@@ -6,12 +17,15 @@ import { UpdateProfileDto } from '../dtos/update-profile.dto';
 import { ProfileResponse } from '../responses/profile.response';
 import { ProfilesService } from '../services/profiles.service';
 
+@ApiTags('Profiles controller')
 @Controller('profiles')
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Get()
-  find(@Query() query?: Subset<FindManyProfileArgs, FindManyProfileArgs>): Promise<ProfileResponse[]> {
+  find(
+    @Query() query?: Subset<FindManyProfileArgs, FindManyProfileArgs>,
+  ): Promise<ProfileResponse[]> {
     return this.profilesService.find(query);
   }
 

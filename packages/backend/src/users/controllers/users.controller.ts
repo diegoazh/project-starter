@@ -7,8 +7,9 @@ import {
   Patch,
   Post,
   Put,
-  Query
+  Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { FindManyUserArgs, Subset } from '@prisma/client';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
@@ -16,12 +17,15 @@ import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserResponse } from '../responses/user.response';
 import { UsersService } from '../services/users.service';
 
+@ApiTags('Users controller')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  find(@Query() query?: Subset<FindManyUserArgs, FindManyUserArgs>): Promise<UserResponse[]> {
+  find(
+    @Query() query?: Subset<FindManyUserArgs, FindManyUserArgs>,
+  ): Promise<UserResponse[]> {
     return this.usersService.find(query);
   }
 

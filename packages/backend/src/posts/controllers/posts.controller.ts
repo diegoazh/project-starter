@@ -9,6 +9,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { FindManyPostArgs, Subset } from '@prisma/client';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PatchPostDto } from '../dtos/patch-post.dto';
@@ -16,6 +17,7 @@ import { UpdatePostDto } from '../dtos/update-post.dto';
 import { PostResponse } from '../responses/post.response';
 import { PostsService } from '../services/posts.service';
 
+@ApiTags('Posts controller')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
