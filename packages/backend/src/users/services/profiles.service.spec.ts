@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../shared/services/prisma.service';
-import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from '../dtos/create-profile.dto';
-import { UpdateProfileDto } from '../dtos/update-profile.dto';
 import { PatchProfileDto } from '../dtos/patch-profile.dto';
+import { UpdateProfileDto } from '../dtos/update-profile.dto';
+import { ProfilesService } from './profiles.service';
 
 const prismaServiceMock = {
   profile: {
-    findMany: jest.fn(),
-    findOne: jest.fn(),
-    count: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
+    findMany: jest.fn(() => []),
+    findOne: jest.fn(() => ({})),
+    count: jest.fn(() => 1),
+    create: jest.fn(() => ({})),
+    update: jest.fn(() => ({})),
+    delete: jest.fn(() => ({})),
   },
 };
 
@@ -39,11 +39,13 @@ describe('ProfilesService', () => {
   it('should call prisma profile.finMany with arguments when call find method', async () => {
     // Arrange
     const args = { where: { id: 1 } };
+    const expectedResult = { data: { profiles: [] } };
 
     // Act
-    await service.find(args);
+    const result = await service.find(args);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.profile.findMany).toHaveBeenCalledTimes(1);
     expect(prisma.profile.findMany).toHaveBeenCalledWith(args);
   });
@@ -52,11 +54,13 @@ describe('ProfilesService', () => {
     // Arrange
     const id = 7;
     const expectedArgs = { where: { id } };
+    const expectedResult = { data: { profile: {} } };
 
     // Act
-    await service.findById(id);
+    const result = await service.findById(id);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.profile.findOne).toHaveBeenCalledTimes(1);
     expect(prisma.profile.findOne).toHaveBeenCalledWith(expectedArgs);
   });
@@ -64,11 +68,13 @@ describe('ProfilesService', () => {
   it('should call prisma profile.count with arguments when call count method', async () => {
     // Arrange
     const args = { where: { lastName: 'Doe' } };
+    const expectedResult = { data: { profiles: { count: 1 } } };
 
     // Act
-    await service.count(args);
+    const result = await service.count(args);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.profile.count).toHaveBeenCalledTimes(1);
     expect(prisma.profile.count).toHaveBeenCalledWith(args);
   });
@@ -83,11 +89,13 @@ describe('ProfilesService', () => {
       userId: 1,
     };
     const expectedArgs = { data: { ...profile, user: null } };
+    const expectedResult = { data: { profile: {} } };
 
     // Act
-    await service.create(profile);
+    const result = await service.create(profile);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.profile.create).toHaveBeenCalledTimes(1);
     expect(prisma.profile.create).toHaveBeenCalledWith(expectedArgs);
   });
@@ -116,13 +124,15 @@ describe('ProfilesService', () => {
       where: { id },
       data: { ...oldProfile, ...profile },
     };
+    const expectedResult = { data: { profile: {} } };
 
     (prisma.profile.findOne as any).mockReturnValue(oldProfile);
 
     // Act
-    await service.update(id, profile);
+    const result = await service.update(id, profile);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.profile.update).toHaveBeenCalledTimes(1);
     expect(prisma.profile.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -148,13 +158,15 @@ describe('ProfilesService', () => {
       where: { id },
       data: { ...oldProfile, ...profile },
     };
+    const expectedResult = { data: { profile: {} } };
 
     (prisma.profile.findOne as any).mockReturnValue(oldProfile);
 
     // Act
-    await service.updateProperty(id, profile);
+    const result = await service.updateProperty(id, profile);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.profile.update).toHaveBeenCalledTimes(1);
     expect(prisma.profile.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -176,6 +188,7 @@ describe('ProfilesService', () => {
       lastName: 'Doe',
     };
     const id = 10;
+    const expectedResult = { data: { profile: oldProfile } };
 
     (prisma.profile.findOne as any).mockReturnValue(oldProfile);
 
@@ -183,19 +196,21 @@ describe('ProfilesService', () => {
     const result = await service.updateProperty(id, profile);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.profile.update).not.toHaveBeenCalled();
-    expect(result).toEqual(oldProfile);
   });
 
   it('should call prisma profile.delete with arguments when call remove method', async () => {
     // Arrange
     const id = 5;
     const expectedArgs = { where: { id } };
+    const expectedResult = { data: { profile: { deleted: {} } } };
 
     // Act
-    await service.remove(id);
+    const result = await service.remove(id);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.profile.delete).toHaveBeenCalledTimes(1);
     expect(prisma.profile.delete).toHaveBeenCalledWith(expectedArgs);
   });

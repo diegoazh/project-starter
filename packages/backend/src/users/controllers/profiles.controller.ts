@@ -14,7 +14,10 @@ import { FindManyProfileArgs, Subset } from '@prisma/client';
 import { CreateProfileDto } from '../dtos/create-profile.dto';
 import { PatchProfileDto } from '../dtos/patch-profile.dto';
 import { UpdateProfileDto } from '../dtos/update-profile.dto';
+import { ProfileDeletedResponse } from '../responses/profile-deleted.response';
 import { ProfileResponse } from '../responses/profile.response';
+import { ProfilesCountResponse } from '../responses/profiles-count.response';
+import { ProfilesResponse } from '../responses/profiles.response';
 import { ProfilesService } from '../services/profiles.service';
 
 @ApiTags('Profiles controller')
@@ -25,7 +28,7 @@ export class ProfilesController {
   @Get()
   find(
     @Query() query?: Subset<FindManyProfileArgs, FindManyProfileArgs>,
-  ): Promise<ProfileResponse[]> {
+  ): Promise<ProfilesResponse> {
     return this.profilesService.find(query);
   }
 
@@ -41,7 +44,7 @@ export class ProfilesController {
       FindManyProfileArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
-  ): Promise<number> {
+  ): Promise<ProfilesCountResponse> {
     return this.profilesService.count(query);
   }
 
@@ -67,7 +70,7 @@ export class ProfilesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<ProfileResponse> {
+  remove(@Param('id') id: number): Promise<ProfileDeletedResponse> {
     return this.profilesService.remove(id);
   }
 }

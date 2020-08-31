@@ -1,8 +1,8 @@
 import { ApiResponse } from 'src/shared/interfaces/api.response';
 import { ProfileEntity } from '../entities/profile.entity';
 
-export class ProfileResponse implements ApiResponse {
+export class ProfilesResponse implements ApiResponse {
   data: {
-    profile: ProfileEntity;
+    profiles: ProfileEntity[];
   };
 }
