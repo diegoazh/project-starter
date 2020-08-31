@@ -1,13 +1,13 @@
 import {
-  IsNotEmpty,
-  IsString,
-  MinLength,
-  MaxLength,
-  IsOptional,
-  IsEnum,
   IsBoolean,
+  IsEnum,
+  IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
+  IsString,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export enum PostType {
@@ -30,11 +30,11 @@ export class CreatePostDto {
 
   @IsEnum(PostType)
   @IsOptional()
-  type: PostType = PostType.TEXT;
+  type: PostType;
 
   @IsBoolean()
   @IsOptional()
-  published = false;
+  published: boolean;
 
   @IsPositive()
   @IsNumber()

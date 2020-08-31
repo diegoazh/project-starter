@@ -1,8 +1,8 @@
 import { ApiResponse } from 'src/shared/interfaces/api.response';
 import { PostEntity } from '../entities/post.entity';
 
-export class PostResponse implements ApiResponse {
+export class PostsResponse implements ApiResponse {
   data: {
-    post: PostEntity;
+    posts: PostEntity[];
   };
 }

@@ -7,12 +7,12 @@ import { PostsService } from './posts.service';
 
 const prismaServiceMock = {
   post: {
-    findMany: jest.fn(),
-    findOne: jest.fn(),
-    count: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
+    findMany: jest.fn(() => []),
+    findOne: jest.fn(() => ({})),
+    count: jest.fn(() => 1),
+    create: jest.fn(() => ({})),
+    update: jest.fn(() => ({})),
+    delete: jest.fn(() => ({})),
   },
 };
 
@@ -39,11 +39,13 @@ describe('PostsService', () => {
   it('should call prisma post.finMany with arguments when call find method', async () => {
     // Arrange
     const args = { where: { id: 1 } };
+    const expectedResult = { data: { posts: [] } };
 
     // Act
-    await service.find(args);
+    const result = await service.find(args);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.findMany).toHaveBeenCalledTimes(1);
     expect(prisma.post.findMany).toHaveBeenCalledWith(args);
   });
@@ -52,11 +54,13 @@ describe('PostsService', () => {
     // Arrange
     const id = 7;
     const expectedArgs = { where: { id } };
+    const expectedResult = { data: { post: {} } };
 
     // Act
-    await service.findById(id);
+    const result = await service.findById(id);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.findOne).toHaveBeenCalledTimes(1);
     expect(prisma.post.findOne).toHaveBeenCalledWith(expectedArgs);
   });
@@ -64,11 +68,13 @@ describe('PostsService', () => {
   it('should call prisma post.count with arguments when call count method', async () => {
     // Arrange
     const args = { where: { published: true } };
+    const expectedResult = { data: { posts: { count: 1 } } };
 
     // Act
-    await service.count(args);
+    const result = await service.count(args);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.count).toHaveBeenCalledTimes(1);
     expect(prisma.post.count).toHaveBeenCalledWith(args);
   });
@@ -85,11 +91,13 @@ describe('PostsService', () => {
       authorId: 1,
     };
     const expectedArgs = { data: { ...post, author: null } };
+    const expectedResult = { data: { post: {} } };
 
     // Act
-    await service.create(post);
+    const result = await service.create(post);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.create).toHaveBeenCalledTimes(1);
     expect(prisma.post.create).toHaveBeenCalledWith(expectedArgs);
   });
@@ -119,13 +127,15 @@ describe('PostsService', () => {
       where: { id },
       data: { ...oldPost, ...post },
     };
+    const expectedResult = { data: { post: {} } };
 
     (prisma.post.findOne as any).mockReturnValue(oldPost);
 
     // Act
-    await service.update(id, post);
+    const result = await service.update(id, post);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.update).toHaveBeenCalledTimes(1);
     expect(prisma.post.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -150,13 +160,15 @@ describe('PostsService', () => {
       where: { id },
       data: { ...oldPost, ...post },
     };
+    const expectedResult = { data: { post: {} } };
 
     (prisma.post.findOne as any).mockReturnValue(oldPost);
 
     // Act
-    await service.updateProperty(id, post);
+    const result = await service.updateProperty(id, post);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.update).toHaveBeenCalledTimes(1);
     expect(prisma.post.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -176,6 +188,7 @@ describe('PostsService', () => {
       title: '',
     };
     const id = 10;
+    const expectedResult = { data: { post: oldPost } };
 
     (prisma.post.findOne as any).mockReturnValue(oldPost);
 
@@ -183,8 +196,8 @@ describe('PostsService', () => {
     const result = await service.updateProperty(id, post);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.update).not.toHaveBeenCalled();
-    expect(result).toEqual(oldPost);
   });
 
   it('should call prisma post.update with arguments and set an empty content when call updateProperty method', async () => {
@@ -209,13 +222,15 @@ describe('PostsService', () => {
       where: { id },
       data: { ...oldPost, ...post },
     };
+    const expectedResult = { data: { post: {} } };
 
     (prisma.post.findOne as any).mockReturnValue(oldPost);
 
     // Act
-    await service.updateProperty(id, post);
+    const result = await service.updateProperty(id, post);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.update).toHaveBeenCalledTimes(1);
     expect(prisma.post.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -224,11 +239,13 @@ describe('PostsService', () => {
     // Arrange
     const id = 5;
     const expectedArgs = { where: { id } };
+    const expectedResult = { data: { post: { deleted: {} } } };
 
     // Act
-    await service.remove(id);
+    const result = await service.remove(id);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.post.delete).toHaveBeenCalledTimes(1);
     expect(prisma.post.delete).toHaveBeenCalledWith(expectedArgs);
   });

@@ -1,54 +1,72 @@
 import { Injectable } from '@nestjs/common';
-import { FindManyPostArgs, Post, Subset } from '@prisma/client';
+import { FindManyPostArgs, Subset } from '@prisma/client';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PatchPostDto } from '../dtos/patch-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
+import { PostDeletedResponse } from '../responses/post-deleted.response';
+import { PostResponse } from '../responses/post.response';
+import { PostsCountResponse } from '../responses/posts-count.response';
+import { PostsResponse } from '../responses/posts.response';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  find(query?: Subset<FindManyPostArgs, FindManyPostArgs>): Promise<Post[]> {
-    return this.prisma.post.findMany(query);
+  async find(
+    query?: Subset<FindManyPostArgs, FindManyPostArgs>,
+  ): Promise<PostsResponse> {
+    const posts = await this.prisma.post.findMany(query);
+
+    return { data: { posts } };
   }
 
-  findById(id: number): Promise<Post> {
-    return this.prisma.post.findOne({ where: { id } });
+  async findById(id: number): Promise<PostResponse> {
+    const post = await this.prisma.post.findOne({ where: { id } });
+
+    return { data: { post } };
   }
 
-  count(
+  async count(
     query?: Pick<
       FindManyPostArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
-  ): Promise<number> {
-    return this.prisma.post.count(query);
+  ): Promise<PostsCountResponse> {
+    const count = await this.prisma.post.count(query);
+
+    return { data: { posts: { count } } };
   }
 
-  create(post: CreatePostDto): Promise<Post> {
-    return this.prisma.post.create({ data: { ...post, author: null } });
-  }
-
-  async update(id: number, post: UpdatePostDto): Promise<Post> {
-    const savedPost = await this.prisma.post.findOne({ where: { id } });
-
-    return this.prisma.post.update({
-      where: { id },
-      data: { ...savedPost, ...post },
+  async create(data: CreatePostDto): Promise<PostResponse> {
+    const post = await this.prisma.post.create({
+      data: { ...data, author: null },
     });
+
+    return { data: { post } };
   }
 
-  async updateProperty(id: number, post: PatchPostDto): Promise<Post> {
+  async update(id: number, data: UpdatePostDto): Promise<PostResponse> {
     const savedPost = await this.prisma.post.findOne({ where: { id } });
+    const post = await this.prisma.post.update({
+      where: { id },
+      data: { ...savedPost, ...data },
+    });
 
-    const mustBeUpdated = Object.keys(post).reduce((needsUpdate, property) => {
-      if (savedPost[property] !== post[property]) {
-        if (post[property] === '' && property !== 'content') {
+    return { data: { post } };
+  }
+
+  async updateProperty(id: number, data: PatchPostDto): Promise<PostResponse> {
+    const savedPost = await this.prisma.post.findOne({ where: { id } });
+    let newPost = null;
+
+    const mustBeUpdated = Object.keys(data).reduce((needsUpdate, property) => {
+      if (savedPost[property] !== data[property]) {
+        if (data[property] === '' && property !== 'content') {
           return needsUpdate;
         }
 
-        savedPost[property] = post[property];
+        savedPost[property] = data[property];
         return true;
       }
 
@@ -56,13 +74,18 @@ export class PostsService {
     }, false);
 
     if (mustBeUpdated) {
-      return this.prisma.post.update({ where: { id }, data: { ...savedPost } });
+      newPost = await this.prisma.post.update({
+        where: { id },
+        data: { ...savedPost },
+      });
     }
 
-    return savedPost;
+    return { data: { post: newPost || savedPost } };
   }
 
-  remove(id: number): Promise<Post> {
-    return this.prisma.post.delete({ where: { id } });
+  async remove(id: number): Promise<PostDeletedResponse> {
+    const deleted = await this.prisma.post.delete({ where: { id } });
+
+    return { data: { post: { deleted } } };
   }
 }

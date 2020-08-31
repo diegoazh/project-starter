@@ -14,7 +14,10 @@ import { FindManyPostArgs, Subset } from '@prisma/client';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PatchPostDto } from '../dtos/patch-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
+import { PostDeletedResponse } from '../responses/post-deleted.response';
 import { PostResponse } from '../responses/post.response';
+import { PostsCountResponse } from '../responses/posts-count.response';
+import { PostsResponse } from '../responses/posts.response';
 import { PostsService } from '../services/posts.service';
 
 @ApiTags('Posts controller')
@@ -25,7 +28,7 @@ export class PostsController {
   @Get()
   find(
     @Query() query?: Subset<FindManyPostArgs, FindManyPostArgs>,
-  ): Promise<PostResponse[]> {
+  ): Promise<PostsResponse> {
     return this.postsService.find(query);
   }
 
@@ -41,7 +44,7 @@ export class PostsController {
       FindManyPostArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
-  ): Promise<number> {
+  ): Promise<PostsCountResponse> {
     return this.postsService.count(query);
   }
 
@@ -67,7 +70,7 @@ export class PostsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<PostResponse> {
+  remove(@Param('id') id: number): Promise<PostDeletedResponse> {
     return this.postsService.remove(id);
   }
 }
