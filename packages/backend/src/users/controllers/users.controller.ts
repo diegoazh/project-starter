@@ -14,7 +14,10 @@ import { FindManyUserArgs, Subset } from '@prisma/client';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { UserDeletedResponse } from '../responses/user-deleted.response';
 import { UserResponse } from '../responses/user.response';
+import { UsersCountResponse } from '../responses/users-count.response';
+import { UsersResponse } from '../responses/users.response';
 import { UsersService } from '../services/users.service';
 
 @ApiTags('Users controller')
@@ -25,7 +28,7 @@ export class UsersController {
   @Get()
   find(
     @Query() query?: Subset<FindManyUserArgs, FindManyUserArgs>,
-  ): Promise<UserResponse[]> {
+  ): Promise<UsersResponse> {
     return this.usersService.find(query);
   }
 
@@ -41,7 +44,7 @@ export class UsersController {
       FindManyUserArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
-  ): Promise<number> {
+  ): Promise<UsersCountResponse> {
     return this.usersService.count(query);
   }
 
@@ -67,7 +70,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<UserResponse> {
+  remove(@Param('id') id: number): Promise<UserDeletedResponse> {
     return this.usersService.remove(id);
   }
 }

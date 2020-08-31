@@ -1,46 +1,63 @@
 import { Injectable } from '@nestjs/common';
-import { FindManyUserArgs, Subset, User } from '@prisma/client';
+import { FindManyUserArgs, Subset } from '@prisma/client';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { UserDeletedResponse } from '../responses/user-deleted.response';
+import { UserResponse } from '../responses/user.response';
+import { UsersCountResponse } from '../responses/users-count.response';
+import { UsersResponse } from '../responses/users.response';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  find(query?: Subset<FindManyUserArgs, FindManyUserArgs>): Promise<User[]> {
-    return this.prisma.user.findMany(query);
+  async find(
+    query?: Subset<FindManyUserArgs, FindManyUserArgs>,
+  ): Promise<UsersResponse> {
+    const users = await this.prisma.user.findMany(query);
+
+    return { data: { users } };
   }
 
-  findById(id: number): Promise<User> {
-    return this.prisma.user.findOne({ where: { id } });
+  async findById(id: number): Promise<UserResponse> {
+    const user = await this.prisma.user.findOne({ where: { id } });
+
+    return { data: { user } };
   }
 
-  count(
+  async count(
     query?: Pick<
       FindManyUserArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
-  ): Promise<number> {
-    return this.prisma.user.count(query);
+  ): Promise<UsersCountResponse> {
+    const count = await this.prisma.user.count(query);
+
+    return { data: { users: { count } } };
   }
 
-  create(user: CreateUserDto): Promise<User> {
-    return this.prisma.user.create({ data: user });
+  async create(data: CreateUserDto): Promise<UserResponse> {
+    const user = await this.prisma.user.create({ data });
+
+    return { data: { user } };
   }
 
-  async update(id: number, user: UpdateUserDto): Promise<User> {
+  async update(id: number, data: UpdateUserDto): Promise<UserResponse> {
     const savedUser = await this.prisma.user.findOne({ where: { id } });
 
-    return this.prisma.user.update({
+    const user = await this.prisma.user.update({
       where: { id },
-      data: { ...savedUser, ...user },
+      data: { ...savedUser, ...data },
     });
+
+    return { data: { user } };
   }
 
-  async updateProperty(id: number, user: PatchUserDto): Promise<User> {
+  async updateProperty(id: number, user: PatchUserDto): Promise<UserResponse> {
     const savedUser = await this.prisma.user.findOne({ where: { id } });
+    let newUser = null;
 
     const mustBeUpdated = Object.keys(user).reduce((needsUpdate, property) => {
       if (user[property] && savedUser[property] !== user[property]) {
@@ -52,13 +69,18 @@ export class UsersService {
     }, false);
 
     if (mustBeUpdated) {
-      return this.prisma.user.update({ where: { id }, data: { ...savedUser } });
+      newUser = await this.prisma.user.update({
+        where: { id },
+        data: { ...savedUser },
+      });
     }
 
-    return savedUser;
+    return { data: { user: newUser || savedUser } };
   }
 
-  remove(id: number): Promise<User> {
-    return this.prisma.user.delete({ where: { id } });
+  async remove(id: number): Promise<UserDeletedResponse> {
+    const deleted = await this.prisma.user.delete({ where: { id } });
+
+    return { data: { user: { deleted } } };
   }
 }

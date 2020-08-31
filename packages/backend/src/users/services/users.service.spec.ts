@@ -7,12 +7,12 @@ import { UsersService } from './users.service';
 
 const prismaServiceMock = {
   user: {
-    findMany: jest.fn(),
-    findOne: jest.fn(),
-    count: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
+    findMany: jest.fn(() => []),
+    findOne: jest.fn(() => ({})),
+    count: jest.fn(() => 1),
+    create: jest.fn(() => ({})),
+    update: jest.fn(() => ({})),
+    delete: jest.fn(() => ({})),
   },
 };
 
@@ -39,11 +39,13 @@ describe('UsersService', () => {
   it('should call prisma user.finMany with arguments when call find method', async () => {
     // Arrange
     const args = { where: { id: 1 } };
+    const expectedResult = { data: { users: [] } };
 
     // Act
-    await service.find(args);
+    const result = await service.find(args);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.user.findMany).toHaveBeenCalledTimes(1);
     expect(prisma.user.findMany).toHaveBeenCalledWith(args);
   });
@@ -52,11 +54,13 @@ describe('UsersService', () => {
     // Arrange
     const id = 7;
     const expectedArgs = { where: { id } };
+    const expectedResult = { data: { user: {} } };
 
     // Act
-    await service.findById(id);
+    const result = await service.findById(id);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.user.findOne).toHaveBeenCalledTimes(1);
     expect(prisma.user.findOne).toHaveBeenCalledWith(expectedArgs);
   });
@@ -64,11 +68,13 @@ describe('UsersService', () => {
   it('should call prisma user.count with arguments when call count method', async () => {
     // Arrange
     const args = { where: { username: 'John' } };
+    const expectedResult = { data: { users: { count: 1 } } };
 
     // Act
-    await service.count(args);
+    const result = await service.count(args);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.user.count).toHaveBeenCalledTimes(1);
     expect(prisma.user.count).toHaveBeenCalledWith(args);
   });
@@ -81,11 +87,13 @@ describe('UsersService', () => {
       username: 'funnyName',
     };
     const expectedArgs = { data: user };
+    const expectedResult = { data: { user: {} } };
 
     // Act
-    await service.create(user);
+    const result = await service.create(user);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.user.create).toHaveBeenCalledTimes(1);
     expect(prisma.user.create).toHaveBeenCalledWith(expectedArgs);
   });
@@ -112,13 +120,15 @@ describe('UsersService', () => {
       where: { id },
       data: { ...oldUser, email, password, username },
     };
+    const expectedResult = { data: { user: {} } };
 
     (prisma.user.findOne as any).mockReturnValue(oldUser);
 
     // Act
-    await service.update(id, user);
+    const result = await service.update(id, user);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.user.update).toHaveBeenCalledTimes(1);
     expect(prisma.user.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -143,13 +153,15 @@ describe('UsersService', () => {
       where: { id },
       data: { ...oldUser, email },
     };
+    const expectedResult = { data: { user: {} } };
 
     (prisma.user.findOne as any).mockReturnValue(oldUser);
 
     // Act
-    await service.updateProperty(id, user);
+    const result = await service.updateProperty(id, user);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.user.update).toHaveBeenCalledTimes(1);
     expect(prisma.user.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -168,6 +180,7 @@ describe('UsersService', () => {
       email: '',
     };
     const id = 10;
+    const expectedResult = { data: { user: oldUser } };
 
     (prisma.user.findOne as any).mockReturnValue(oldUser);
 
@@ -175,19 +188,21 @@ describe('UsersService', () => {
     const result = await service.updateProperty(id, user);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.user.update).not.toHaveBeenCalled();
-    expect(result).toEqual(oldUser);
   });
 
   it('should call prisma user.delete with arguments when call remove method', async () => {
     // Arrange
     const id = 5;
     const expectedArgs = { where: { id } };
+    const expectedResult = { data: { user: { deleted: {} } } };
 
     // Act
-    await service.remove(id);
+    const result = await service.remove(id);
 
     // Assert
+    expect(result).toEqual(expectedResult);
     expect(prisma.user.delete).toHaveBeenCalledTimes(1);
     expect(prisma.user.delete).toHaveBeenCalledWith(expectedArgs);
   });

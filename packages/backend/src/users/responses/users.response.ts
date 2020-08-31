@@ -1,8 +1,8 @@
 import { ApiResponse } from 'src/shared/interfaces/api.response';
 import { UserEntity } from '../entities/user.entity';
 
-export class UserResponse implements ApiResponse {
+export class UsersResponse implements ApiResponse {
   data: {
-    user: UserEntity;
+    users: UserEntity[];
   };
 }
