@@ -56,17 +56,17 @@ export class PostsService {
     return { data: { post } };
   }
 
-  async updateProperty(id: number, data: PatchPostDto): Promise<PostResponse> {
+  async updateProperty(id: number, post: PatchPostDto): Promise<PostResponse> {
     const savedPost = await this.prisma.post.findOne({ where: { id } });
     let newPost = null;
 
-    const mustBeUpdated = Object.keys(data).reduce((needsUpdate, property) => {
-      if (savedPost[property] !== data[property]) {
-        if (data[property] === '' && property !== 'content') {
+    const mustBeUpdated = Object.keys(post).reduce((needsUpdate, property) => {
+      if (savedPost[property] !== post[property]) {
+        if (post[property] === '' && property !== 'content') {
           return needsUpdate;
         }
 
-        savedPost[property] = data[property];
+        savedPost[property] = post[property];
         return true;
       }
 
