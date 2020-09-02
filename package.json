@@ -6,6 +6,7 @@
   "repository": "git@github.com:diegoazh/project-starter.git",
   "author": "Diego A. Zapata Häntsch <diegoazh2003@gmail.com>",
   "license": "MIT",
+  "private": "true",
   "scripts": {
     "build": "lerna run build",
     "lint": "lerna run lint",
@@ -25,5 +26,8 @@
     "husky": "^4.2.5",
     "jest": "^26.4.2",
     "lerna": "^3.22.1"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
