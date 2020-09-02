@@ -8,6 +8,7 @@ import { UsersService } from './services/users.service';
 @Module({
   imports: [SharedModule],
   controllers: [UsersController, ProfilesController],
-  providers: [UsersService, ProfilesService]
+  providers: [UsersService, ProfilesService],
+  exports: [UsersService],
 })
 export class UsersModule {}
