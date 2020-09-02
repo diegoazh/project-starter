@@ -12,7 +12,8 @@
     "start:debug": "vue-cli-service serve",
     "test": "yarn run test:unit && yarn run test:e2e",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "clean": "rimraf ./node_modules"
   },
   "dependencies": {
     "core-js": "^3.6.2",

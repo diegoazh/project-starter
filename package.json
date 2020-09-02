@@ -17,7 +17,11 @@
     "start:debug": "lerna run start:debug",
     "start:dev": "lerna run start:dev",
     "test": "lerna run test --parallel --",
-    "test:cov": "lerna run test:cov --parallel --"
+    "test:cov": "lerna run test:cov --parallel --",
+    "clean": "lerna run clean && rimraf ./node_modules"
+  },
+  "dependencies": {
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
@@ -26,8 +30,5 @@
     "husky": "^4.2.5",
     "jest": "^26.4.2",
     "lerna": "^3.22.1"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+  }
 }

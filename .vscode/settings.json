@@ -7,7 +7,7 @@
   "editor.trimAutoWhitespace": true,
   "editor.formatOnSave": false,
   "eslint.workingDirectories": [
-    { "directory": "./packages/backend", "changeProcessCWD": true }
+    { "pattern": "./packages/*/", "changeProcessCWD": true }
   ],
   "files.exclude": {
     "**/.DS_Store": true,

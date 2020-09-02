@@ -14,6 +14,6 @@
   "packages": [
     "packages/*"
   ],
-  "useWorkspaces": true,
+  "useWorkspaces": false,
   "version": "independent"
 }

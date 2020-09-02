@@ -24,7 +24,8 @@
     "release": "standard-version",
     "lint-staged": "lint-staged",
     "prisma:generate": "prisma generate",
-    "make-badges": "jest-badges-readme --coverageDir='./coverage'"
+    "make-badges": "jest-badges-readme --coverageDir='./coverage'",
+    "clean": "rimraf ./node_modules"
   },
   "dependencies": {
     "@nestjs/common": "^7.4.2",
