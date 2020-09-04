@@ -26,51 +26,65 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  find(
+  async find(
     @Query() query?: Subset<FindManyPostArgs, FindManyPostArgs>,
   ): Promise<PostsResponse> {
-    return this.postsService.find(query);
+    const posts = await this.postsService.find(query);
+
+    return { data: { posts } };
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Promise<PostResponse> {
-    return this.postsService.findById(id);
+  async findById(@Param('id') id: number): Promise<PostResponse> {
+    const post = await this.postsService.findById(id);
+
+    return { data: { post } };
   }
 
   @Get('count')
-  count(
+  async count(
     @Query()
     query: Pick<
       FindManyPostArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
   ): Promise<PostsCountResponse> {
-    return this.postsService.count(query);
+    const count = await this.postsService.count(query);
+
+    return { data: { posts: { count } } };
   }
 
   @Post()
-  create(@Body() post: CreatePostDto): Promise<PostResponse> {
-    return this.postsService.create(post);
+  async create(@Body() post: CreatePostDto): Promise<PostResponse> {
+    const newPost = await this.postsService.create(post);
+
+    return { data: { post: newPost } };
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: number,
     @Body() post: UpdatePostDto,
   ): Promise<PostResponse> {
-    return this.postsService.update(id, post);
+    const updatedPost = await this.postsService.update(id, post);
+
+    return { data: { post: updatedPost } };
   }
 
   @Patch(':id')
-  updateProperty(
+  async updateProperty(
     @Param('id') id: number,
     post: PatchPostDto,
   ): Promise<PostResponse> {
-    return this.postsService.updateProperty(id, post);
+    const updatedPost = await this.postsService.updateProperty(id, post);
+
+    return { data: { post: updatedPost } };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<PostDeletedResponse> {
-    return this.postsService.remove(id);
+  async remove(@Param('id') id: number): Promise<PostDeletedResponse> {
+    const deleted = await this.postsService.remove(id);
+
+    return { data: { post: { deleted } } };
   }
 }

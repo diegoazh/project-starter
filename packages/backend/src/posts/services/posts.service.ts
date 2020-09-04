@@ -1,30 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { FindManyPostArgs, Subset } from '@prisma/client';
+import { FindManyPostArgs, Post, Subset } from '@prisma/client';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PatchPostDto } from '../dtos/patch-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
-import { PostDeletedResponse } from '../responses/post-deleted.response';
-import { PostResponse } from '../responses/post.response';
-import { PostsCountResponse } from '../responses/posts-count.response';
-import { PostsResponse } from '../responses/posts.response';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async find(
-    query?: Subset<FindManyPostArgs, FindManyPostArgs>,
-  ): Promise<PostsResponse> {
-    const posts = await this.prisma.post.findMany(query);
-
-    return { data: { posts } };
+  find(query?: Subset<FindManyPostArgs, FindManyPostArgs>): Promise<Post[]> {
+    return this.prisma.post.findMany(query);
   }
 
-  async findById(id: number): Promise<PostResponse> {
-    const post = await this.prisma.post.findOne({ where: { id } });
-
-    return { data: { post } };
+  findById(id: number): Promise<Post> {
+    return this.prisma.post.findOne({ where: { id } });
   }
 
   async count(
@@ -32,33 +22,27 @@ export class PostsService {
       FindManyPostArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
-  ): Promise<PostsCountResponse> {
-    const count = await this.prisma.post.count(query);
-
-    return { data: { posts: { count } } };
+  ): Promise<number> {
+    return this.prisma.post.count(query);
   }
 
-  async create(data: CreatePostDto): Promise<PostResponse> {
-    const post = await this.prisma.post.create({
+  create(data: CreatePostDto): Promise<Post> {
+    return this.prisma.post.create({
       data: { ...data, author: null },
     });
-
-    return { data: { post } };
   }
 
-  async update(id: number, data: UpdatePostDto): Promise<PostResponse> {
+  async update(id: number, data: UpdatePostDto): Promise<Post> {
     const savedPost = await this.prisma.post.findOne({ where: { id } });
-    const post = await this.prisma.post.update({
+
+    return this.prisma.post.update({
       where: { id },
       data: { ...savedPost, ...data },
     });
-
-    return { data: { post } };
   }
 
-  async updateProperty(id: number, post: PatchPostDto): Promise<PostResponse> {
+  async updateProperty(id: number, post: PatchPostDto): Promise<Post> {
     const savedPost = await this.prisma.post.findOne({ where: { id } });
-    let newPost = null;
 
     const mustBeUpdated = Object.keys(post).reduce((needsUpdate, property) => {
       if (savedPost[property] !== post[property]) {
@@ -74,18 +58,16 @@ export class PostsService {
     }, false);
 
     if (mustBeUpdated) {
-      newPost = await this.prisma.post.update({
+      return this.prisma.post.update({
         where: { id },
         data: { ...savedPost },
       });
     }
 
-    return { data: { post: newPost || savedPost } };
+    return savedPost;
   }
 
-  async remove(id: number): Promise<PostDeletedResponse> {
-    const deleted = await this.prisma.post.delete({ where: { id } });
-
-    return { data: { post: { deleted } } };
+  async remove(id: number): Promise<Post> {
+    return this.prisma.post.delete({ where: { id } });
   }
 }

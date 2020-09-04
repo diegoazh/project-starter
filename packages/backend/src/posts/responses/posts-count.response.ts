@@ -1,4 +1,4 @@
-import { ApiResponse } from 'src/shared/interfaces/api.response';
+import { ApiResponse } from '../../shared/interfaces/api.response';
 
 export class PostsCountResponse implements ApiResponse {
   data: {
