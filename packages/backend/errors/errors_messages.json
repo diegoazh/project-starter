@@ -1,0 +1,6 @@
+{
+  "pass.min.len.dto": "The password must be at least of 8 characters",
+  "pass.max.len.dto": "The maximum length of the password is 32 characters",
+  "username.min.len.dto": "The username must be at least of 4 characters",
+  "username.max.len.dto": "The maximum length of the username is 32 characters"
+}
