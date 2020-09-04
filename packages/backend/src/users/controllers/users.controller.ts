@@ -5,13 +5,11 @@ import {
   Get,
   Param,
   Patch,
-  Post,
   Put,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FindManyUserArgs, Subset } from '@prisma/client';
-import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserDeletedResponse } from '../responses/user-deleted.response';
@@ -26,51 +24,58 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  find(
+  async find(
     @Query() query?: Subset<FindManyUserArgs, FindManyUserArgs>,
   ): Promise<UsersResponse> {
-    return this.usersService.find(query);
+    const users = await this.usersService.find(query);
+
+    return { data: { users: this.usersService.cleanUsers(users) } };
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Promise<UserResponse> {
-    return this.usersService.findById(id);
+  async findById(@Param('id') id: number): Promise<UserResponse> {
+    const user = await this.usersService.findById(id);
+
+    return { data: { user: this.usersService.cleanUsers(user) } };
   }
 
   @Get('count')
-  count(
+  async count(
     @Query()
     query: Pick<
       FindManyUserArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
   ): Promise<UsersCountResponse> {
-    return this.usersService.count(query);
-  }
+    const count = await this.usersService.count(query);
 
-  @Post()
-  create(@Body() user: CreateUserDto): Promise<UserResponse> {
-    return this.usersService.create(user);
+    return { data: { users: { count } } };
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: number,
     @Body() user: UpdateUserDto,
   ): Promise<UserResponse> {
-    return this.usersService.update(id, user);
+    const updatedUser = await this.usersService.update(id, user);
+
+    return { data: { user: this.usersService.cleanUsers(updatedUser) } };
   }
 
   @Patch(':id')
-  updateProperty(
+  async updateProperty(
     @Param('id') id: number,
     user: PatchUserDto,
   ): Promise<UserResponse> {
-    return this.usersService.updateProperty(id, user);
+    const updatedUser = await this.usersService.updateProperty(id, user);
+
+    return { data: { user: this.usersService.cleanUsers(updatedUser) } };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<UserDeletedResponse> {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: number): Promise<UserDeletedResponse> {
+    const user = await this.usersService.remove(id);
+
+    return { data: { user: { deleted: this.usersService.cleanUsers(user) } } };
   }
 }

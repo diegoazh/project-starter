@@ -1,4 +1,6 @@
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { BcryptService } from '../../shared/services/bcrypt.service';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
@@ -16,20 +18,32 @@ const prismaServiceMock = {
   },
 };
 
+const bcryptServiceMock = {
+  hashPassword: jest.fn((arg) => arg.split('').reverse().join('')),
+};
+
+const configServiceMock = {
+  get: jest.fn(() => '200'),
+};
+
 describe('UsersService', () => {
   let service: UsersService;
   let prisma: PrismaService;
+  let bcrypt: BcryptService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
         { provide: PrismaService, useValue: prismaServiceMock },
+        { provide: BcryptService, useValue: bcryptServiceMock },
+        { provide: ConfigService, useValue: configServiceMock },
       ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
     prisma = module.get<PrismaService>(PrismaService);
+    bcrypt = module.get<BcryptService>(BcryptService);
   });
 
   afterEach(() => {
@@ -39,28 +53,29 @@ describe('UsersService', () => {
   it('should call prisma user.finMany with arguments when call find method', async () => {
     // Arrange
     const args = { where: { id: 1 } };
-    const expectedResult = { data: { users: [] } };
+    const expectedArgs = {
+      orderBy: { id: 'asc' },
+      take: 200,
+      where: { id: 1 },
+    };
 
     // Act
-    const result = await service.find(args);
+    await service.find(args);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.user.findMany).toHaveBeenCalledTimes(1);
-    expect(prisma.user.findMany).toHaveBeenCalledWith(args);
+    expect(prisma.user.findMany).toHaveBeenCalledWith(expectedArgs);
   });
 
   it('should call prisma user.findOne with arguments when call findById method', async () => {
     // Arrange
     const id = 7;
     const expectedArgs = { where: { id } };
-    const expectedResult = { data: { user: {} } };
 
     // Act
-    const result = await service.findById(id);
+    await service.findById(id);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.user.findOne).toHaveBeenCalledTimes(1);
     expect(prisma.user.findOne).toHaveBeenCalledWith(expectedArgs);
   });
@@ -68,13 +83,11 @@ describe('UsersService', () => {
   it('should call prisma user.count with arguments when call count method', async () => {
     // Arrange
     const args = { where: { username: 'John' } };
-    const expectedResult = { data: { users: { count: 1 } } };
 
     // Act
-    const result = await service.count(args);
+    await service.count(args);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.user.count).toHaveBeenCalledTimes(1);
     expect(prisma.user.count).toHaveBeenCalledWith(args);
   });
@@ -86,14 +99,16 @@ describe('UsersService', () => {
       password: 'secret',
       username: 'funnyName',
     };
-    const expectedArgs = { data: user };
-    const expectedResult = { data: { user: {} } };
+    const expectedArgs = {
+      data: { ...user, password: user.password.split('').reverse().join('') },
+    };
 
     // Act
-    const result = await service.create(user);
+    await service.create(user);
 
     // Assert
-    expect(result).toEqual(expectedResult);
+    expect(bcrypt.hashPassword).toHaveBeenCalledTimes(1);
+    expect(bcrypt.hashPassword).toHaveBeenCalledWith(user.password);
     expect(prisma.user.create).toHaveBeenCalledTimes(1);
     expect(prisma.user.create).toHaveBeenCalledWith(expectedArgs);
   });
@@ -120,15 +135,13 @@ describe('UsersService', () => {
       where: { id },
       data: { ...oldUser, email, password, username },
     };
-    const expectedResult = { data: { user: {} } };
 
     (prisma.user.findOne as any).mockReturnValue(oldUser);
 
     // Act
-    const result = await service.update(id, user);
+    await service.update(id, user);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.user.update).toHaveBeenCalledTimes(1);
     expect(prisma.user.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -153,15 +166,13 @@ describe('UsersService', () => {
       where: { id },
       data: { ...oldUser, email },
     };
-    const expectedResult = { data: { user: {} } };
 
     (prisma.user.findOne as any).mockReturnValue(oldUser);
 
     // Act
-    const result = await service.updateProperty(id, user);
+    await service.updateProperty(id, user);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.user.update).toHaveBeenCalledTimes(1);
     expect(prisma.user.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -180,15 +191,13 @@ describe('UsersService', () => {
       email: '',
     };
     const id = 10;
-    const expectedResult = { data: { user: oldUser } };
 
     (prisma.user.findOne as any).mockReturnValue(oldUser);
 
     // Act
-    const result = await service.updateProperty(id, user);
+    await service.updateProperty(id, user);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.user.update).not.toHaveBeenCalled();
   });
 
@@ -196,13 +205,11 @@ describe('UsersService', () => {
     // Arrange
     const id = 5;
     const expectedArgs = { where: { id } };
-    const expectedResult = { data: { user: { deleted: {} } } };
 
     // Act
-    const result = await service.remove(id);
+    await service.remove(id);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.user.delete).toHaveBeenCalledTimes(1);
     expect(prisma.user.delete).toHaveBeenCalledWith(expectedArgs);
   });

@@ -1,63 +1,72 @@
 import { Injectable } from '@nestjs/common';
-import { FindManyUserArgs, Subset } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+import { FindManyUserArgs, Subset, User } from '@prisma/client';
+import { BcryptService } from '../../shared/services/bcrypt.service';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
-import { UserDeletedResponse } from '../responses/user-deleted.response';
-import { UserResponse } from '../responses/user.response';
-import { UsersCountResponse } from '../responses/users-count.response';
-import { UsersResponse } from '../responses/users.response';
+import { CleanedUser, UserWithoutPassword } from '../types/user-types.type';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly password = '********';
 
-  async find(
-    query?: Subset<FindManyUserArgs, FindManyUserArgs>,
-  ): Promise<UsersResponse> {
-    const users = await this.prisma.user.findMany(query);
+  private readonly takeLimit: number;
 
-    return { data: { users } };
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly bcrypt: BcryptService,
+    private readonly configService: ConfigService,
+  ) {
+    this.takeLimit = parseInt(
+      this.configService.get<string>('USERS_TAKE_MAX'),
+      10,
+    );
   }
 
-  async findById(id: number): Promise<UserResponse> {
-    const user = await this.prisma.user.findOne({ where: { id } });
-
-    return { data: { user } };
+  find(query?: Subset<FindManyUserArgs, FindManyUserArgs>): Promise<User[]> {
+    return this.prisma.user.findMany({
+      orderBy: { id: 'asc' },
+      take: this.takeLimit,
+      ...query,
+    });
   }
 
-  async count(
+  findById(id: number): Promise<User> {
+    return this.prisma.user.findOne({ where: { id } });
+  }
+
+  findOne(userData: UserWithoutPassword): Promise<User> {
+    const query = { where: { ...userData } };
+    return this.prisma.user.findOne(query);
+  }
+
+  count(
     query?: Pick<
       FindManyUserArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
-  ): Promise<UsersCountResponse> {
-    const count = await this.prisma.user.count(query);
-
-    return { data: { users: { count } } };
+  ): Promise<number> {
+    return this.prisma.user.count(query);
   }
 
-  async create(data: CreateUserDto): Promise<UserResponse> {
-    const user = await this.prisma.user.create({ data });
-
-    return { data: { user } };
+  create(data: CreateUserDto): Promise<User> {
+    const password = this.bcrypt.hashPassword(data.password);
+    return this.prisma.user.create({ data: { ...data, password } });
   }
 
-  async update(id: number, data: UpdateUserDto): Promise<UserResponse> {
+  async update(id: number, data: UpdateUserDto): Promise<User> {
     const savedUser = await this.prisma.user.findOne({ where: { id } });
 
-    const user = await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { id },
       data: { ...savedUser, ...data },
     });
-
-    return { data: { user } };
   }
 
-  async updateProperty(id: number, user: PatchUserDto): Promise<UserResponse> {
+  async updateProperty(id: number, user: PatchUserDto): Promise<User> {
     const savedUser = await this.prisma.user.findOne({ where: { id } });
-    let newUser = null;
 
     const mustBeUpdated = Object.keys(user).reduce((needsUpdate, property) => {
       if (user[property] && savedUser[property] !== user[property]) {
@@ -69,18 +78,29 @@ export class UsersService {
     }, false);
 
     if (mustBeUpdated) {
-      newUser = await this.prisma.user.update({
+      return this.prisma.user.update({
         where: { id },
         data: { ...savedUser },
       });
     }
 
-    return { data: { user: newUser || savedUser } };
+    return savedUser;
   }
 
-  async remove(id: number): Promise<UserDeletedResponse> {
-    const deleted = await this.prisma.user.delete({ where: { id } });
+  remove(id: number): Promise<User> {
+    return this.prisma.user.delete({ where: { id } });
+  }
 
-    return { data: { user: { deleted } } };
+  public cleanUsers<T extends User | User[]>(data: T): CleanedUser<T> {
+    if (Array.isArray(data)) {
+      const newData = [...data].map<User>((user: User) => ({
+        ...user,
+        password: this.password,
+      }));
+
+      return (newData as unknown) as CleanedUser<T>;
+    }
+
+    return ({ ...data, password: this.password } as unknown) as CleanedUser<T>;
   }
 }

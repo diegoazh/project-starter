@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UsersService } from '../services/users.service';
 import { UsersController } from './users.controller';
 
 const usersServiceMock = {
-  find: jest.fn(),
-  findById: jest.fn(),
-  count: jest.fn(),
-  create: jest.fn(),
-  update: jest.fn(),
-  updateProperty: jest.fn(),
-  remove: jest.fn(),
+  find: jest.fn(() => []),
+  findById: jest.fn(() => ({})),
+  count: jest.fn(() => 1),
+  create: jest.fn(() => ({})),
+  update: jest.fn(() => ({})),
+  updateProperty: jest.fn(() => ({})),
+  remove: jest.fn(() => ({})),
+  cleanUsers: jest.fn(() => ({})),
 };
 
 describe('Users Controller', () => {
@@ -44,6 +44,8 @@ describe('Users Controller', () => {
     // Assert
     expect(usersService.find).toHaveBeenCalledTimes(1);
     expect(usersService.find).toHaveBeenCalledWith(args);
+    expect(usersService.cleanUsers).toHaveBeenCalledTimes(1);
+    expect(usersService.cleanUsers).toHaveBeenCalledWith([]);
   });
 
   it('should call usersService.findById with provided args when receive a GET HTTP request on /users/:id', async () => {
@@ -56,6 +58,8 @@ describe('Users Controller', () => {
     // Assert
     expect(usersService.findById).toHaveBeenCalledTimes(1);
     expect(usersService.findById).toHaveBeenCalledWith(id);
+    expect(usersService.cleanUsers).toHaveBeenCalledTimes(1);
+    expect(usersService.cleanUsers).toHaveBeenCalledWith({});
   });
 
   it('should call usersService.count with provided args when receive a GET HTTP request on /users/count', async () => {
@@ -68,22 +72,6 @@ describe('Users Controller', () => {
     // Assert
     expect(usersService.count).toHaveBeenCalledTimes(1);
     expect(usersService.count).toHaveBeenCalledWith(args);
-  });
-
-  it('should call usersService.create with provided args when receive a POST HTTP request on /users', async () => {
-    // Arrange
-    const user: CreateUserDto = {
-      email: 'test@test.com',
-      password: 'secret',
-      username: 'funnyName',
-    };
-
-    // Act
-    await controller.create(user);
-
-    // Assert
-    expect(usersService.create).toHaveBeenCalledTimes(1);
-    expect(usersService.create).toHaveBeenCalledWith(user);
   });
 
   it('should call usersService.update with provided args when receive a PUT HTTP request on /users/:id', async () => {
@@ -101,6 +89,8 @@ describe('Users Controller', () => {
     // Assert
     expect(usersService.update).toHaveBeenCalledTimes(1);
     expect(usersService.update).toHaveBeenCalledWith(id, user);
+    expect(usersService.cleanUsers).toHaveBeenCalledTimes(1);
+    expect(usersService.cleanUsers).toHaveBeenCalledWith({});
   });
 
   it('should call usersService.updateProperty with provided args when receive a PATCH HTTP request on /users/:id', async () => {
@@ -116,6 +106,8 @@ describe('Users Controller', () => {
     // Assert
     expect(usersService.updateProperty).toHaveBeenCalledTimes(1);
     expect(usersService.updateProperty).toHaveBeenCalledWith(id, user);
+    expect(usersService.cleanUsers).toHaveBeenCalledTimes(1);
+    expect(usersService.cleanUsers).toHaveBeenCalledWith({});
   });
 
   it('should call usersService.remove with provided args when receive a DELETE HTTP request on /users/:id', async () => {
@@ -128,5 +120,7 @@ describe('Users Controller', () => {
     // Assert
     expect(usersService.remove).toHaveBeenCalledTimes(1);
     expect(usersService.remove).toHaveBeenCalledWith(id);
+    expect(usersService.cleanUsers).toHaveBeenCalledTimes(1);
+    expect(usersService.cleanUsers).toHaveBeenCalledWith({});
   });
 });
