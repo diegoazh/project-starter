@@ -13,14 +13,14 @@ export class CreateUserDto {
   @IsNotEmpty()
   email: string;
 
-  @MaxLength(32, { message: 'pass.max.len.dto' })
-  @MinLength(8, { message: 'pass.min.len.dto' })
+  @MaxLength(32, { message: 'hrkXvLA' })
+  @MinLength(8, { message: 'dKxcSlZ' })
   @IsString()
   @IsNotEmpty()
   password: string;
 
-  @MaxLength(32, { message: 'username.max.len.dto' })
-  @MinLength(4, { message: 'username.min.len.dto' })
+  @MaxLength(32, { message: 'gMbEGLG' })
+  @MinLength(4, { message: 'uqeybUm' })
   @IsString()
   @IsOptional()
   username?: string;
