@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SharedModule } from 'src/shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { ProfilesController } from './controllers/profiles.controller';
 import { UsersController } from './controllers/users.controller';
 import { ProfilesService } from './services/profiles.service';
