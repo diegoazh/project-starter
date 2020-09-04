@@ -26,51 +26,68 @@ export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Get()
-  find(
+  async find(
     @Query() query?: Subset<FindManyProfileArgs, FindManyProfileArgs>,
   ): Promise<ProfilesResponse> {
-    return this.profilesService.find(query);
+    const profiles = await this.profilesService.find(query);
+
+    return { data: { profiles } };
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Promise<ProfileResponse> {
-    return this.profilesService.findById(id);
+  async findById(@Param('id') id: number): Promise<ProfileResponse> {
+    const profile = await this.profilesService.findById(id);
+
+    return { data: { profile } };
   }
 
   @Get('count')
-  count(
+  async count(
     @Query()
     query: Pick<
       FindManyProfileArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
   ): Promise<ProfilesCountResponse> {
-    return this.profilesService.count(query);
+    const count = await this.profilesService.count(query);
+
+    return { data: { profiles: { count } } };
   }
 
   @Post()
-  create(@Body() profile: CreateProfileDto): Promise<ProfileResponse> {
-    return this.profilesService.create(profile);
+  async create(@Body() profile: CreateProfileDto): Promise<ProfileResponse> {
+    const newProfile = await this.profilesService.create(profile);
+
+    return { data: { profile: newProfile } };
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: number,
     @Body() profile: UpdateProfileDto,
   ): Promise<ProfileResponse> {
-    return this.profilesService.update(id, profile);
+    const updatedProfile = await this.profilesService.update(id, profile);
+
+    return { data: { profile: updatedProfile } };
   }
 
   @Patch(':id')
-  updateProperty(
+  async updateProperty(
     @Param('id') id: number,
     profile: PatchProfileDto,
   ): Promise<ProfileResponse> {
-    return this.profilesService.updateProperty(id, profile);
+    const updatedProfile = await this.profilesService.updateProperty(
+      id,
+      profile,
+    );
+
+    return { data: { profile: updatedProfile } };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<ProfileDeletedResponse> {
-    return this.profilesService.remove(id);
+  async remove(@Param('id') id: number): Promise<ProfileDeletedResponse> {
+    const deleted = await this.profilesService.remove(id);
+
+    return { data: { profile: { deleted } } };
   }
 }

@@ -39,13 +39,11 @@ describe('ProfilesService', () => {
   it('should call prisma profile.finMany with arguments when call find method', async () => {
     // Arrange
     const args = { where: { id: 1 } };
-    const expectedResult = { data: { profiles: [] } };
 
     // Act
-    const result = await service.find(args);
+    await service.find(args);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.profile.findMany).toHaveBeenCalledTimes(1);
     expect(prisma.profile.findMany).toHaveBeenCalledWith(args);
   });
@@ -54,13 +52,11 @@ describe('ProfilesService', () => {
     // Arrange
     const id = 7;
     const expectedArgs = { where: { id } };
-    const expectedResult = { data: { profile: {} } };
 
     // Act
-    const result = await service.findById(id);
+    await service.findById(id);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.profile.findOne).toHaveBeenCalledTimes(1);
     expect(prisma.profile.findOne).toHaveBeenCalledWith(expectedArgs);
   });
@@ -68,13 +64,11 @@ describe('ProfilesService', () => {
   it('should call prisma profile.count with arguments when call count method', async () => {
     // Arrange
     const args = { where: { lastName: 'Doe' } };
-    const expectedResult = { data: { profiles: { count: 1 } } };
 
     // Act
-    const result = await service.count(args);
+    await service.count(args);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.profile.count).toHaveBeenCalledTimes(1);
     expect(prisma.profile.count).toHaveBeenCalledWith(args);
   });
@@ -89,13 +83,11 @@ describe('ProfilesService', () => {
       userId: 1,
     };
     const expectedArgs = { data: { ...profile, user: null } };
-    const expectedResult = { data: { profile: {} } };
 
     // Act
-    const result = await service.create(profile);
+    await service.create(profile);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.profile.create).toHaveBeenCalledTimes(1);
     expect(prisma.profile.create).toHaveBeenCalledWith(expectedArgs);
   });
@@ -124,15 +116,13 @@ describe('ProfilesService', () => {
       where: { id },
       data: { ...oldProfile, ...profile },
     };
-    const expectedResult = { data: { profile: {} } };
 
     (prisma.profile.findOne as any).mockReturnValue(oldProfile);
 
     // Act
-    const result = await service.update(id, profile);
+    await service.update(id, profile);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.profile.update).toHaveBeenCalledTimes(1);
     expect(prisma.profile.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -158,15 +148,13 @@ describe('ProfilesService', () => {
       where: { id },
       data: { ...oldProfile, ...profile },
     };
-    const expectedResult = { data: { profile: {} } };
 
     (prisma.profile.findOne as any).mockReturnValue(oldProfile);
 
     // Act
-    const result = await service.updateProperty(id, profile);
+    await service.updateProperty(id, profile);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.profile.update).toHaveBeenCalledTimes(1);
     expect(prisma.profile.update).toHaveBeenCalledWith(expectedArgs);
   });
@@ -188,15 +176,13 @@ describe('ProfilesService', () => {
       lastName: 'Doe',
     };
     const id = 10;
-    const expectedResult = { data: { profile: oldProfile } };
 
     (prisma.profile.findOne as any).mockReturnValue(oldProfile);
 
     // Act
-    const result = await service.updateProperty(id, profile);
+    await service.updateProperty(id, profile);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.profile.update).not.toHaveBeenCalled();
   });
 
@@ -204,13 +190,11 @@ describe('ProfilesService', () => {
     // Arrange
     const id = 5;
     const expectedArgs = { where: { id } };
-    const expectedResult = { data: { profile: { deleted: {} } } };
 
     // Act
-    const result = await service.remove(id);
+    await service.remove(id);
 
     // Assert
-    expect(result).toEqual(expectedResult);
     expect(prisma.profile.delete).toHaveBeenCalledTimes(1);
     expect(prisma.profile.delete).toHaveBeenCalledWith(expectedArgs);
   });
