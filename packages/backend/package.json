@@ -6,8 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "postinstall": "prisma generate",
-    "prebuild": "rimraf dist && prisma generate",
+    "prebuild": "rimraf dist && yarn run prisma:generate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -24,6 +23,8 @@
     "release": "standard-version",
     "lint-staged": "lint-staged",
     "prisma:generate": "prisma generate",
+    "migrations:generate": "prisma migrate save --experimental",
+    "migrations:run": "prisma migrate up --experimental",
     "make-badges": "jest-badges-readme --coverageDir='./coverage'",
     "clean": "rimraf ./node_modules"
   },
@@ -35,6 +36,7 @@
     "@nestjs/platform-express": "^7.4.2",
     "@nestjs/swagger": "^4.6.0",
     "@prisma/client": "2.5.1",
+    "bcryptjs": "^2.4.3",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "passport": "^0.4.1",
