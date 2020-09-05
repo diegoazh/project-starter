@@ -1,6 +1,6 @@
-# Migration `20200830172802-initial_migration`
+# Migration `20200905105231-initial`
 
-This migration has been generated at 8/30/2020, 5:28:02 PM.
+This migration has been generated at 9/5/2020, 10:52:31 AM.
 You can check out the [state of the schema](./schema.prisma) after the migration.
 
 ## Database Steps
@@ -10,7 +10,7 @@ CREATE TABLE `backend`.`Post` (
 `id` int  NOT NULL  AUTO_INCREMENT,
 `title` varchar(191)  NOT NULL ,
 `content` varchar(191)  ,
-`type` ENUM('TEXT', 'IMAGE')  NOT NULL DEFAULT 'TEXT',
+`type` ENUM('TEXT', 'GALLERY')  NOT NULL DEFAULT 'TEXT',
 `published` boolean  NOT NULL DEFAULT false,
 `author_id` int  NOT NULL ,
 `created_at` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -50,7 +50,7 @@ ALTER TABLE `backend`.`Profile` ADD FOREIGN KEY (`user_id`) REFERENCES `backend`
 
 ```diff
 diff --git schema.prisma schema.prisma
-migration ..20200830172802-initial_migration
+migration ..20200905105231-initial
 --- datamodel.dml
 +++ datamodel.dml
 @@ -1,0 +1,50 @@
@@ -102,7 +102,7 @@ migration ..20200830172802-initial_migration
 +
 +enum PostType {
 +  TEXT
-+  IMAGE
++  GALLERY
 +}
 ```
 

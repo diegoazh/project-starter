@@ -12,7 +12,7 @@ import {
 
 export enum PostType {
   TEXT = 'TEXT',
-  IMAGE = 'IMAGE',
+  GALLERY = 'GALLERY',
 }
 
 export class CreatePostDto {

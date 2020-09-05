@@ -6,7 +6,7 @@
       "enum": "PostType",
       "values": [
         "TEXT",
-        "IMAGE"
+        "GALLERY"
       ]
     },
     {
