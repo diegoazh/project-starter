@@ -1,4 +1,11 @@
-import { Body, Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Logger,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../../users/dtos/create-user.dto';
 import { UserResponse } from '../../users/responses/user.response';
@@ -18,7 +25,7 @@ export class AuthController {
   @Post('login')
   login(
     @Body() credentials: CredentialsDto,
-    @Req() req: AuthenticatedRequest,
+    @Request() req: AuthenticatedRequest,
   ): any {
     this.logger.log(`credentials: ${credentials}`);
     return req.user;
