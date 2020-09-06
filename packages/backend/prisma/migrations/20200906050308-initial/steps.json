@@ -10,6 +10,14 @@
       ]
     },
     {
+      "tag": "CreateEnum",
+      "enum": "RoleType",
+      "values": [
+        "USER",
+        "ADMIN"
+      ]
+    },
+    {
       "tag": "CreateSource",
       "source": "db"
     },
@@ -712,6 +720,38 @@
       "field": "password",
       "type": "String",
       "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "role",
+      "type": "RoleType",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "role"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "role"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "USER"
     },
     {
       "tag": "CreateField",

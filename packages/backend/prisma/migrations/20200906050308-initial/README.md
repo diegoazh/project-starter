@@ -1,6 +1,6 @@
-# Migration `20200905105231-initial`
+# Migration `20200906050308-initial`
 
-This migration has been generated at 9/5/2020, 10:52:31 AM.
+This migration has been generated at 9/6/2020, 5:03:08 AM.
 You can check out the [state of the schema](./schema.prisma) after the migration.
 
 ## Database Steps
@@ -34,6 +34,7 @@ CREATE TABLE `backend`.`User` (
 `id` int  NOT NULL  AUTO_INCREMENT,
 `email` varchar(191)  NOT NULL ,
 `password` varchar(191)  NOT NULL ,
+`role` ENUM('USER', 'ADMIN')  DEFAULT 'USER',
 `username` varchar(191)  ,
 `created_at` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 `updated_at` datetime(3)  NOT NULL ,
@@ -50,10 +51,10 @@ ALTER TABLE `backend`.`Profile` ADD FOREIGN KEY (`user_id`) REFERENCES `backend`
 
 ```diff
 diff --git schema.prisma schema.prisma
-migration ..20200905105231-initial
+migration ..20200906050308-initial
 --- datamodel.dml
 +++ datamodel.dml
-@@ -1,0 +1,50 @@
+@@ -1,0 +1,56 @@
 +// This is your Prisma schema file,
 +// learn more about it in the docs: https://pris.ly/d/prisma-schema
 +
@@ -90,19 +91,25 @@ migration ..20200905105231-initial
 +}
 +
 +model User {
-+  id          Int      @default(autoincrement()) @id
-+  email       String   @unique
++  id          Int       @default(autoincrement()) @id
++  email       String    @unique
 +  password    String
++  role        RoleType? @default(USER)
 +  username    String?
 +  posts       Post[]
 +  profile     Profile?
-+  createdAt   DateTime @default(now()) @map("created_at")
-+  updatedAt   DateTime @updatedAt @map("updated_at")
++  createdAt   DateTime  @default(now()) @map("created_at")
++  updatedAt   DateTime  @updatedAt @map("updated_at")
 +}
 +
 +enum PostType {
 +  TEXT
 +  GALLERY
++}
++
++enum RoleType {
++  USER
++  ADMIN
 +}
 ```
 

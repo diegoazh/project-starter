@@ -34,17 +34,23 @@ model Profile {
 }
 
 model User {
-  id          Int      @default(autoincrement()) @id
-  email       String   @unique
+  id          Int       @default(autoincrement()) @id
+  email       String    @unique
   password    String
+  role        RoleType? @default(USER)
   username    String?
   posts       Post[]
   profile     Profile?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 }
 
 enum PostType {
   TEXT
   GALLERY
+}
+
+enum RoleType {
+  USER
+  ADMIN
 }
