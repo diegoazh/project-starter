@@ -111,7 +111,7 @@ describe('PostsService', () => {
       content:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor leo sit amet lobortis tempor. Sed in luctus felis, non.',
       published: false,
-      type: PostType.IMAGE,
+      type: PostType.GALLERY,
     };
     const id = 1;
 
