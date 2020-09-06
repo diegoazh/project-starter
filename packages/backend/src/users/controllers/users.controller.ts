@@ -7,9 +7,11 @@ import {
   Patch,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { FindManyUserArgs, Subset } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserDeletedResponse } from '../responses/user-deleted.response';
@@ -19,6 +21,8 @@ import { UsersResponse } from '../responses/users.response';
 import { UsersService } from '../services/users.service';
 
 @ApiTags('Users controller')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

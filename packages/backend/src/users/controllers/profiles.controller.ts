@@ -8,9 +8,11 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindManyProfileArgs, Subset } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateProfileDto } from '../dtos/create-profile.dto';
 import { PatchProfileDto } from '../dtos/patch-profile.dto';
 import { UpdateProfileDto } from '../dtos/update-profile.dto';
@@ -21,7 +23,9 @@ import { ProfilesResponse } from '../responses/profiles.response';
 import { ProfilesService } from '../services/profiles.service';
 
 @ApiTags('Profiles controller')
+@ApiBearerAuth()
 @Controller('profiles')
+@UseGuards(JwtAuthGuard)
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
