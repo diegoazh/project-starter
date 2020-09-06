@@ -9,14 +9,14 @@ export class UserEntity implements User {
 
   username: string | null;
 
-  role?: RoleType;
+  role: 'USER' | 'ADMIN';
 
   createdAt: Date;
 
   updatedAt: Date;
 }
 
-export enum RoleType {
+export const enum RoleType {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }
