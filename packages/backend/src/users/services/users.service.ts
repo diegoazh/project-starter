@@ -6,6 +6,7 @@ import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { RoleType } from '../entities/user.entity';
 import { CleanedUser, UserWithoutPassword } from '../types/user-types.type';
 
 @Injectable()
@@ -53,7 +54,9 @@ export class UsersService {
 
   create(data: CreateUserDto): Promise<User> {
     const password = this.bcrypt.hashPassword(data.password);
-    return this.prisma.user.create({ data: { ...data, password } });
+    return this.prisma.user.create({
+      data: { ...data, password, role: RoleType.USER },
+    });
   }
 
   async update(id: number, data: UpdateUserDto): Promise<User> {

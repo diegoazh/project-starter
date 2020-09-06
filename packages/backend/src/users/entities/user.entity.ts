@@ -9,7 +9,14 @@ export class UserEntity implements User {
 
   username: string | null;
 
+  role?: RoleType;
+
   createdAt: Date;
 
   updatedAt: Date;
+}
+
+export enum RoleType {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
 }
