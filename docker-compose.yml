@@ -19,8 +19,8 @@ services:
       - "3306:3306"
 
   backend:
-    image: node:lts-alpine
-    container_name: nestjs
+    image: backend_container
+    container_name: backend_container
     restart: always
     working_dir: /${BACKEND_WORKING_DIR}
     volumes:
@@ -39,6 +39,28 @@ services:
       context: ./packages/backend
     command: yarn run start:${START_TYPE}
 
+  admin:
+    image: admin_container
+    container_name: admin_container
+    restart: always
+    working_dir: /${ADMIN_WORKING_DIR}
+    volumes:
+      - ./packages/admin:/${ADMIN_WORKING_DIR}
+      - /${ADMIN_WORKING_DIR}/node_modules
+    ports:
+      - "8080:8080"
+      - "9230:9229"
+    networks:
+      - admin
+    environment:
+      - START_TYPE
+      - NODE_ENV
+      - ADMIN_WORKING_DIR
+    build:
+      context: ./packages/admin
+    command: yarn run start:${START_TYPE}
+
 networks:
+  admin:
   # frontend:
   backend:
