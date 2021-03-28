@@ -1,5 +1,8 @@
 -- CreateEnum
-CREATE TYPE "PostType" AS ENUM ('TEXT', 'IMAGE');
+CREATE TYPE "PostType" AS ENUM ('TEXT', 'GALLERY');
+
+-- CreateEnum
+CREATE TYPE "RoleType" AS ENUM ('USER', 'ADMIN');
 
 -- CreateTable
 CREATE TABLE "Post" (
@@ -33,6 +36,7 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "role" "RoleType" DEFAULT E'USER',
     "username" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
