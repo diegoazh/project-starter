@@ -8,10 +8,10 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { FindManyProfileArgs, Subset } from '@prisma/client';
+import { FindManyProfileArgs, Subset } from 'prisma';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateProfileDto } from '../dtos/create-profile.dto';
 import { PatchProfileDto } from '../dtos/patch-profile.dto';

@@ -8,7 +8,7 @@ import { PostsService } from './posts.service';
 const prismaServiceMock = {
   post: {
     findMany: jest.fn(() => []),
-    findOne: jest.fn(() => ({})),
+    findFirst: jest.fn(() => ({})),
     count: jest.fn(() => 1),
     create: jest.fn(() => ({})),
     update: jest.fn(() => ({})),
@@ -38,7 +38,7 @@ describe('PostsService', () => {
 
   it('should call prisma post.finMany with arguments when call find method', async () => {
     // Arrange
-    const args = { where: { id: 1 } };
+    const args = { where: { id: 'abcd-efgh-ijkl-mnop' } };
 
     // Act
     await service.find(args);
@@ -48,17 +48,17 @@ describe('PostsService', () => {
     expect(prisma.post.findMany).toHaveBeenCalledWith(args);
   });
 
-  it('should call prisma post.findOne with arguments when call findById method', async () => {
+  it('should call prisma post.findFirst with arguments when call findById method', async () => {
     // Arrange
-    const id = 7;
+    const id = 'abcd-efgh-ijkl-mnop';
     const expectedArgs = { where: { id } };
 
     // Act
     await service.findById(id);
 
     // Assert
-    expect(prisma.post.findOne).toHaveBeenCalledTimes(1);
-    expect(prisma.post.findOne).toHaveBeenCalledWith(expectedArgs);
+    expect(prisma.post.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.post.findFirst).toHaveBeenCalledWith(expectedArgs);
   });
 
   it('should call prisma post.count with arguments when call count method', async () => {
@@ -82,7 +82,7 @@ describe('PostsService', () => {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque consectetur nunc mi, nec ullamcorper augue maximus id. Nam lacinia sapien.',
       published: true,
       type: PostType.TEXT,
-      authorId: 1,
+      authorId: 'abcd-efgh-ijkl-mnop',
     };
     const expectedArgs = { data: { ...post, author: null } };
 
@@ -113,14 +113,14 @@ describe('PostsService', () => {
       published: false,
       type: PostType.GALLERY,
     };
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     const expectedArgs = {
       where: { id },
       data: { ...oldPost, ...post },
     };
 
-    (prisma.post.findOne as any).mockReturnValue(oldPost);
+    (prisma.post.findFirst as any).mockReturnValue(oldPost);
 
     // Act
     await service.update(id, post);
@@ -139,19 +139,19 @@ describe('PostsService', () => {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque consectetur nunc mi, nec ullamcorper augue maximus id. Nam lacinia sapien.',
       published: true,
       type: PostType.TEXT,
-      authorId: 1,
+      authorId: 'abcd-efgh-ijkl-mnop',
     };
     const post: PatchPostDto = {
       published: false,
     };
-    const id = 10;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     const expectedArgs = {
       where: { id },
       data: { ...oldPost, ...post },
     };
 
-    (prisma.post.findOne as any).mockReturnValue(oldPost);
+    (prisma.post.findFirst as any).mockReturnValue(oldPost);
 
     // Act
     await service.updateProperty(id, post);
@@ -175,9 +175,9 @@ describe('PostsService', () => {
     const post: PatchPostDto = {
       title: '',
     };
-    const id = 10;
+    const id = 'abcd-efgh-ijkl-mnop';
 
-    (prisma.post.findOne as any).mockReturnValue(oldPost);
+    (prisma.post.findFirst as any).mockReturnValue(oldPost);
 
     // Act
     await service.updateProperty(id, post);
@@ -195,21 +195,21 @@ describe('PostsService', () => {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque consectetur nunc mi, nec ullamcorper augue maximus id. Nam lacinia sapien.',
       published: true,
       type: PostType.TEXT,
-      authorId: 1,
+      authorId: 'abcd-efgh-ijkl-mnop',
     };
     const post: PatchPostDto = {
       title:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis.',
       content: '',
     };
-    const id = 10;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     const expectedArgs = {
       where: { id },
       data: { ...oldPost, ...post },
     };
 
-    (prisma.post.findOne as any).mockReturnValue(oldPost);
+    (prisma.post.findFirst as any).mockReturnValue(oldPost);
 
     // Act
     await service.updateProperty(id, post);
@@ -221,7 +221,7 @@ describe('PostsService', () => {
 
   it('should call prisma post.delete with arguments when call remove method', async () => {
     // Arrange
-    const id = 5;
+    const id = 'abcd-efgh-ijkl-mnop';
     const expectedArgs = { where: { id } };
 
     // Act

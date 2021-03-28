@@ -8,7 +8,7 @@ import { ProfilesService } from './profiles.service';
 const prismaServiceMock = {
   profile: {
     findMany: jest.fn(() => []),
-    findOne: jest.fn(() => ({})),
+    findFirst: jest.fn(() => ({})),
     count: jest.fn(() => 1),
     create: jest.fn(() => ({})),
     update: jest.fn(() => ({})),
@@ -48,17 +48,17 @@ describe('ProfilesService', () => {
     expect(prisma.profile.findMany).toHaveBeenCalledWith(args);
   });
 
-  it('should call prisma profile.findOne with arguments when call findById method', async () => {
+  it('should call prisma profile.findFirst with arguments when call findById method', async () => {
     // Arrange
-    const id = 7;
+    const id = 'abc-def-ghi';
     const expectedArgs = { where: { id } };
 
     // Act
     await service.findById(id);
 
     // Assert
-    expect(prisma.profile.findOne).toHaveBeenCalledTimes(1);
-    expect(prisma.profile.findOne).toHaveBeenCalledWith(expectedArgs);
+    expect(prisma.profile.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.profile.findFirst).toHaveBeenCalledWith(expectedArgs);
   });
 
   it('should call prisma profile.count with arguments when call count method', async () => {
@@ -110,14 +110,14 @@ describe('ProfilesService', () => {
       firstName: 'Alice',
       lastName: 'Smith',
     };
-    const id = 1;
+    const id = 'abc-def-ghi';
 
     const expectedArgs = {
       where: { id },
       data: { ...oldProfile, ...profile },
     };
 
-    (prisma.profile.findOne as any).mockReturnValue(oldProfile);
+    (prisma.profile.findFirst as any).mockReturnValue(oldProfile);
 
     // Act
     await service.update(id, profile);
@@ -142,14 +142,14 @@ describe('ProfilesService', () => {
     const profile: PatchProfileDto = {
       lastName: 'Smith',
     };
-    const id = 10;
+    const id = 'abc-def-ghi';
 
     const expectedArgs = {
       where: { id },
       data: { ...oldProfile, ...profile },
     };
 
-    (prisma.profile.findOne as any).mockReturnValue(oldProfile);
+    (prisma.profile.findFirst as any).mockReturnValue(oldProfile);
 
     // Act
     await service.updateProperty(id, profile);
@@ -175,9 +175,9 @@ describe('ProfilesService', () => {
       firstName: 'John',
       lastName: 'Doe',
     };
-    const id = 10;
+    const id = 'abcd-efgh-ijkl-mnop';
 
-    (prisma.profile.findOne as any).mockReturnValue(oldProfile);
+    (prisma.profile.findFirst as any).mockReturnValue(oldProfile);
 
     // Act
     await service.updateProperty(id, profile);
@@ -188,7 +188,7 @@ describe('ProfilesService', () => {
 
   it('should call prisma profile.delete with arguments when call remove method', async () => {
     // Arrange
-    const id = 5;
+    const id = 'abc-def-ghi';
     const expectedArgs = { where: { id } };
 
     // Act

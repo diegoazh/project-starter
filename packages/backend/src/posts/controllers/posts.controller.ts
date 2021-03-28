@@ -8,18 +8,14 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { FindManyPostArgs, Subset } from '@prisma/client';
+import { FindManyPostArgs, Subset } from 'prisma';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PatchPostDto } from '../dtos/patch-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
-import { PostDeletedResponse } from '../responses/post-deleted.response';
-import { PostResponse } from '../responses/post.response';
-import { PostsCountResponse } from '../responses/posts-count.response';
-import { PostsResponse } from '../responses/posts.response';
 import { PostsService } from '../services/posts.service';
 
 @ApiTags('Posts controller')

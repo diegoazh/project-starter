@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url = env("DATABASE_URL")
 }
 
 generator client {
@@ -11,31 +11,31 @@ generator client {
 }
 
 model Post {
-  id        Int      @default(autoincrement()) @id
-  title     String
+  id        String      @id @default(uuid())
+  title     String   @db.VarChar(200)
   content   String?
-  type      PostType @default(TEXT)
+  type      PostType  @default(TEXT)
   published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int      @map("author_id")
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String      @map("author_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model Profile {
-  id        Int       @default(autoincrement()) @id
-  bio       String?
-  firstName  String?  @map("first_name")
-  lastName  String?   @map("last_name")
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int       @unique @map("user_id")
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  id         String       @id @default(uuid())
+  bio        String?
+  firstName  String?   @db.VarChar(150) @map("first_name")
+  lastName   String?   @db.VarChar(150) @map("last_name")
+  user       User       @relation(fields: [userId], references: [id])
+  userId     String       @unique @map("user_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
 }
 
 model User {
-  id          Int       @default(autoincrement()) @id
-  email       String    @unique
+  id          String      @id @default(uuid())
+  email       String   @unique
   password    String
   role        RoleType? @default(USER)
   username    String?

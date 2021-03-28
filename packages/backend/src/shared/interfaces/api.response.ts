@@ -1,4 +1,4 @@
-export interface ApiResponse {
+export interface ApiResponse<T> {
   links?: {
     self: string;
     prev?: string;
@@ -6,7 +6,7 @@ export interface ApiResponse {
     last?: string;
   };
 
-  data: any; // TODO: this should be entity, entity[] or count or deleted interfaces.
+  data: T;
 
   errors?: any[];
 }

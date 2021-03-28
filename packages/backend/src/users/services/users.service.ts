@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FindManyUserArgs, Subset, User } from '@prisma/client';
+import { FindManyUserArgs, Subset, User } from 'prisma';
 import { BcryptService } from '../../shared/services/bcrypt.service';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateUserDto } from '../dtos/create-user.dto';

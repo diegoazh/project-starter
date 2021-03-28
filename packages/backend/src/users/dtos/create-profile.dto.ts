@@ -30,5 +30,5 @@ export class CreateProfileDto {
   @IsPositive()
   @IsNumber()
   @IsNotEmpty()
-  userId: number;
+  userid: string;
 }

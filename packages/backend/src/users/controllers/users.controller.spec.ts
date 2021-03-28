@@ -64,7 +64,7 @@ describe('Users Controller', () => {
 
   it('should call usersService.count with provided args when receive a GET HTTP request on /users/count', async () => {
     // Arrange
-    const args = { where: { username: 'Alice' } };
+    const args = { where: { username: 'Alice' } } as any;
 
     // Act
     await controller.count(args);

@@ -60,7 +60,7 @@ describe('Posts Controller', () => {
 
   it('should call postsService.count with provided args when receive a GET HTTP request on /posts/count', async () => {
     // Arrange
-    const args = { where: { published: true } };
+    const args = { where: { published: true } } as any;
 
     // Act
     await controller.count(args);

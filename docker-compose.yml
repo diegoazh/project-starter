@@ -18,6 +18,21 @@ services:
     ports:
       - "3306:3306"
 
+  backend_db_postgres:
+    image: postgres:latest
+    container_name: backend_db_postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${BACKEND_POSTGRESQL_ROOT_PASSWORD}
+      - POSTGRES_DB=${BACKEND_POSTGRESQL_DB}
+      - POSTGRES_USER=${BACKEND_POSTGRESQL_USER}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+
   backend:
     image: backend_container
     container_name: backend_container
@@ -64,3 +79,6 @@ networks:
   admin:
   # frontend:
   backend:
+
+volumes:
+  pgdata:

@@ -7,10 +7,10 @@ import {
   Patch,
   Put,
   Query,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { FindManyUserArgs, Subset } from '@prisma/client';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { FindManyUserArgs, Subset } from 'prisma';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';

@@ -10,7 +10,7 @@ import { UsersService } from './users.service';
 const prismaServiceMock = {
   user: {
     findMany: jest.fn(() => []),
-    findOne: jest.fn(() => ({})),
+    findFirst: jest.fn(() => ({})),
     count: jest.fn(() => 1),
     create: jest.fn(() => ({})),
     update: jest.fn(() => ({})),
@@ -67,7 +67,7 @@ describe('UsersService', () => {
     expect(prisma.user.findMany).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma user.findOne with arguments when call findById method', async () => {
+  it('should call prisma user.findFirst with arguments when call findById method', async () => {
     // Arrange
     const id = 7;
     const expectedArgs = { where: { id } };
@@ -76,8 +76,8 @@ describe('UsersService', () => {
     await service.findById(id);
 
     // Assert
-    expect(prisma.user.findOne).toHaveBeenCalledTimes(1);
-    expect(prisma.user.findOne).toHaveBeenCalledWith(expectedArgs);
+    expect(prisma.user.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.user.findFirst).toHaveBeenCalledWith(expectedArgs);
   });
 
   it('should call prisma user.count with arguments when call count method', async () => {
@@ -136,7 +136,7 @@ describe('UsersService', () => {
       data: { ...oldUser, email, password, username },
     };
 
-    (prisma.user.findOne as any).mockReturnValue(oldUser);
+    (prisma.user.findFirst as any).mockReturnValue(oldUser);
 
     // Act
     await service.update(id, user);
@@ -167,7 +167,7 @@ describe('UsersService', () => {
       data: { ...oldUser, email },
     };
 
-    (prisma.user.findOne as any).mockReturnValue(oldUser);
+    (prisma.user.findFirst as any).mockReturnValue(oldUser);
 
     // Act
     await service.updateProperty(id, user);
@@ -192,7 +192,7 @@ describe('UsersService', () => {
     };
     const id = 10;
 
-    (prisma.user.findOne as any).mockReturnValue(oldUser);
+    (prisma.user.findFirst as any).mockReturnValue(oldUser);
 
     // Act
     await service.updateProperty(id, user);

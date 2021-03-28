@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FindManyPostArgs, Post, Subset } from '@prisma/client';
+import { FindManyPostArgs, Post, Subset } from 'prisma';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PatchPostDto } from '../dtos/patch-post.dto';
@@ -13,8 +13,8 @@ export class PostsService {
     return this.prisma.post.findMany(query);
   }
 
-  findById(id: number): Promise<Post> {
-    return this.prisma.post.findOne({ where: { id } });
+  findById(id: string): Promise<Post> {
+    return this.prisma.post.findFirst({ where: { id } });
   }
 
   async count(
@@ -32,8 +32,8 @@ export class PostsService {
     });
   }
 
-  async update(id: number, data: UpdatePostDto): Promise<Post> {
-    const savedPost = await this.prisma.post.findOne({ where: { id } });
+  async update(id: string, data: UpdatePostDto): Promise<Post> {
+    const savedPost = await this.prisma.post.findFirst({ where: { id } });
 
     return this.prisma.post.update({
       where: { id },
@@ -41,8 +41,8 @@ export class PostsService {
     });
   }
 
-  async updateProperty(id: number, post: PatchPostDto): Promise<Post> {
-    const savedPost = await this.prisma.post.findOne({ where: { id } });
+  async updateProperty(id: string, post: PatchPostDto): Promise<Post> {
+    const savedPost = await this.prisma.post.findFirst({ where: { id } });
 
     const mustBeUpdated = Object.keys(post).reduce((needsUpdate, property) => {
       if (savedPost[property] !== post[property]) {
@@ -67,7 +67,7 @@ export class PostsService {
     return savedPost;
   }
 
-  async remove(id: number): Promise<Post> {
+  async remove(id: string): Promise<Post> {
     return this.prisma.post.delete({ where: { id } });
   }
 }

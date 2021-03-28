@@ -39,5 +39,5 @@ export class CreatePostDto {
   @IsPositive()
   @IsNumber()
   @IsNotEmpty()
-  authorId: number;
+  authorid: string;
 }

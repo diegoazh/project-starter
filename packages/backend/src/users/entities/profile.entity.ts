@@ -1,7 +1,7 @@
 import { Profile } from '@prisma/client';
 
 export class ProfileEntity implements Profile {
-  id: number;
+  id: string;
 
   bio: string;
 
@@ -9,7 +9,7 @@ export class ProfileEntity implements Profile {
 
   lastName: string;
 
-  userId: number;
+  userId: string;
 
   createdAt: Date;
 

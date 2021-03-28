@@ -1,7 +1,7 @@
 import { Post, PostType } from '@prisma/client';
 
 export class PostEntity implements Post {
-  id: number;
+  id: string;
 
   title: string;
 
@@ -11,7 +11,7 @@ export class PostEntity implements Post {
 
   published: boolean;
 
-  authorId: number;
+  authorId: string;
 
   createdAt: Date;
 
