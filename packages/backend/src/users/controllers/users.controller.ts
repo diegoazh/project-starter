@@ -7,7 +7,7 @@ import {
   Patch,
   Put,
   Query,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindManyUserArgs, Subset } from 'prisma';
@@ -37,7 +37,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<UserResponse> {
+  async findById(@Param('id') id: string): Promise<UserResponse> {
     const user = await this.usersService.findById(id);
 
     return { data: { user: this.usersService.cleanUsers(user) } };
@@ -58,7 +58,7 @@ export class UsersController {
 
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() user: UpdateUserDto,
   ): Promise<UserResponse> {
     const updatedUser = await this.usersService.update(id, user);
@@ -68,7 +68,7 @@ export class UsersController {
 
   @Patch(':id')
   async updateProperty(
-    @Param('id') id: number,
+    @Param('id') id: string,
     user: PatchUserDto,
   ): Promise<UserResponse> {
     const updatedUser = await this.usersService.updateProperty(id, user);
@@ -77,7 +77,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<UserDeletedResponse> {
+  async remove(@Param('id') id: string): Promise<UserDeletedResponse> {
     const user = await this.usersService.remove(id);
 
     return { data: { user: { deleted: this.usersService.cleanUsers(user) } } };

@@ -1,11 +1,11 @@
 export interface JwtPayload {
-  sub: number;
+  sub: string;
   username: string;
   email: string;
 }
 
 export interface JwtDecrypted {
   email: string;
-  userId: number;
+  userid: string;
   username: string;
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FindManyUserArgs, Subset, User } from 'prisma';
+import { User } from '@prisma/client';
+import { FindManyUserArgs, Subset } from 'prisma';
 import { BcryptService } from '../../shared/services/bcrypt.service';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
@@ -34,13 +35,13 @@ export class UsersService {
     });
   }
 
-  findById(id: number): Promise<User> {
-    return this.prisma.user.findOne({ where: { id } });
+  findById(id: string): Promise<User> {
+    return this.prisma.user.findFirst({ where: { id } });
   }
 
   findOne(userData: UserWithoutPassword): Promise<User> {
     const query = { where: { ...userData } };
-    return this.prisma.user.findOne(query);
+    return this.prisma.user.findFirst(query);
   }
 
   count(
@@ -59,8 +60,8 @@ export class UsersService {
     });
   }
 
-  async update(id: number, data: UpdateUserDto): Promise<User> {
-    const savedUser = await this.prisma.user.findOne({ where: { id } });
+  async update(id: string, data: UpdateUserDto): Promise<User> {
+    const savedUser = await this.prisma.user.findFirst({ where: { id } });
 
     return this.prisma.user.update({
       where: { id },
@@ -68,8 +69,8 @@ export class UsersService {
     });
   }
 
-  async updateProperty(id: number, user: PatchUserDto): Promise<User> {
-    const savedUser = await this.prisma.user.findOne({ where: { id } });
+  async updateProperty(id: string, user: PatchUserDto): Promise<User> {
+    const savedUser = await this.prisma.user.findFirst({ where: { id } });
 
     const mustBeUpdated = Object.keys(user).reduce((needsUpdate, property) => {
       if (user[property] && savedUser[property] !== user[property]) {
@@ -90,7 +91,7 @@ export class UsersService {
     return savedUser;
   }
 
-  remove(id: number): Promise<User> {
+  remove(id: string): Promise<User> {
     return this.prisma.user.delete({ where: { id } });
   }
 

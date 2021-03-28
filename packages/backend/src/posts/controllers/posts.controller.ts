@@ -8,7 +8,7 @@ import {
   Post,
   Put,
   Query,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindManyPostArgs, Subset } from 'prisma';
@@ -16,6 +16,10 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PatchPostDto } from '../dtos/patch-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
+import { PostDeletedResponse } from '../responses/post-deleted.response';
+import { PostResponse } from '../responses/post.response';
+import { PostsCountResponse } from '../responses/posts-count.response';
+import { PostsResponse } from '../responses/posts.response';
 import { PostsService } from '../services/posts.service';
 
 @ApiTags('Posts controller')
@@ -33,7 +37,7 @@ export class PostsController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<PostResponse> {
+  async findById(@Param('id') id: string): Promise<PostResponse> {
     const post = await this.postsService.findById(id);
 
     return { data: { post } };
@@ -65,7 +69,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() post: UpdatePostDto,
   ): Promise<PostResponse> {
     const updatedPost = await this.postsService.update(id, post);
@@ -77,7 +81,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async updateProperty(
-    @Param('id') id: number,
+    @Param('id') id: string,
     post: PatchPostDto,
   ): Promise<PostResponse> {
     const updatedPost = await this.postsService.updateProperty(id, post);
@@ -88,7 +92,7 @@ export class PostsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<PostDeletedResponse> {
+  async remove(@Param('id') id: string): Promise<PostDeletedResponse> {
     const deleted = await this.postsService.remove(id);
 
     return { data: { post: { deleted } } };

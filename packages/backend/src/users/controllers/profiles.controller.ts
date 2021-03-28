@@ -8,7 +8,7 @@ import {
   Post,
   Put,
   Query,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindManyProfileArgs, Subset } from 'prisma';
@@ -39,7 +39,7 @@ export class ProfilesController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<ProfileResponse> {
+  async findById(@Param('id') id: string): Promise<ProfileResponse> {
     const profile = await this.profilesService.findById(id);
 
     return { data: { profile } };
@@ -67,7 +67,7 @@ export class ProfilesController {
 
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() profile: UpdateProfileDto,
   ): Promise<ProfileResponse> {
     const updatedProfile = await this.profilesService.update(id, profile);
@@ -77,7 +77,7 @@ export class ProfilesController {
 
   @Patch(':id')
   async updateProperty(
-    @Param('id') id: number,
+    @Param('id') id: string,
     profile: PatchProfileDto,
   ): Promise<ProfileResponse> {
     const updatedProfile = await this.profilesService.updateProperty(
@@ -89,7 +89,7 @@ export class ProfilesController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<ProfileDeletedResponse> {
+  async remove(@Param('id') id: string): Promise<ProfileDeletedResponse> {
     const deleted = await this.profilesService.remove(id);
 
     return { data: { profile: { deleted } } };

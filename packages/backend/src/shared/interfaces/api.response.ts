@@ -1,4 +1,4 @@
-export interface ApiResponse<T> {
+export interface ApiResponse<T, U = { [key: string]: T }> {
   links?: {
     self: string;
     prev?: string;
@@ -6,7 +6,7 @@ export interface ApiResponse<T> {
     last?: string;
   };
 
-  data: T;
+  data: U;
 
   errors?: any[];
 }
