@@ -1,8 +1,6 @@
 import {
   IsNotEmpty,
-  IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
   MaxLength,
   MinLength,
@@ -27,8 +25,7 @@ export class CreateProfileDto {
   @IsOptional()
   lastName?: string;
 
-  @IsPositive()
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  userid: string;
+  userId: string;
 }

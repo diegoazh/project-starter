@@ -50,7 +50,7 @@ describe('Users Controller', () => {
 
   it('should call usersService.findById with provided args when receive a GET HTTP request on /users/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     // Act
     await controller.findById(id);
@@ -76,7 +76,7 @@ describe('Users Controller', () => {
 
   it('should call usersService.update with provided args when receive a PUT HTTP request on /users/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
     const user: UpdateUserDto = {
       email: 'test@test.com',
       password: 'newSecret',
@@ -95,7 +95,7 @@ describe('Users Controller', () => {
 
   it('should call usersService.updateProperty with provided args when receive a PATCH HTTP request on /users/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
     const user: PatchUserDto = {
       email: 'test@test.com',
     };
@@ -112,7 +112,7 @@ describe('Users Controller', () => {
 
   it('should call usersService.remove with provided args when receive a DELETE HTTP request on /users/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     // Act
     await controller.remove(id);

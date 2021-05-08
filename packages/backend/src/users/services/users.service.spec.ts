@@ -2,6 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BcryptService } from '../../shared/services/bcrypt.service';
 import { PrismaService } from '../../shared/services/prisma.service';
+import { UserRole } from '../constants/user.constant';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
@@ -69,7 +70,7 @@ describe('UsersService', () => {
 
   it('should call prisma user.findFirst with arguments when call findById method', async () => {
     // Arrange
-    const id = 7;
+    const id = 'abcd-efgh-ijkl-mnop';
     const expectedArgs = { where: { id } };
 
     // Act
@@ -85,7 +86,7 @@ describe('UsersService', () => {
     const args = { where: { username: 'John' } };
 
     // Act
-    await service.count(args);
+    await service.count(args as any);
 
     // Assert
     expect(prisma.user.count).toHaveBeenCalledTimes(1);
@@ -100,7 +101,11 @@ describe('UsersService', () => {
       username: 'funnyName',
     };
     const expectedArgs = {
-      data: { ...user, password: user.password.split('').reverse().join('') },
+      data: {
+        ...user,
+        password: user.password.split('').reverse().join(''),
+        role: UserRole.USER,
+      },
     };
 
     // Act
@@ -128,7 +133,7 @@ describe('UsersService', () => {
       password: 'newSecret',
       username: 'funnyName',
     };
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     const { email, password, username } = user;
     const expectedArgs = {
@@ -159,7 +164,7 @@ describe('UsersService', () => {
     const user: PatchUserDto = {
       email: 'test@test.com',
     };
-    const id = 10;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     const { email } = user;
     const expectedArgs = {
@@ -180,7 +185,7 @@ describe('UsersService', () => {
   it('should call prisma user.update with arguments and not update the user data when call updateProperty method with empty data', async () => {
     // Arrange
     const oldUser = {
-      id: 10,
+      id: 'abcd-efgh-ijkl-mnop',
       email: 'old@test.com',
       password: 'oldSecret',
       username: 'oldFunnyName',
@@ -190,7 +195,7 @@ describe('UsersService', () => {
     const user: PatchUserDto = {
       email: '',
     };
-    const id = 10;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     (prisma.user.findFirst as any).mockReturnValue(oldUser);
 
@@ -203,7 +208,7 @@ describe('UsersService', () => {
 
   it('should call prisma user.delete with arguments when call remove method', async () => {
     // Arrange
-    const id = 5;
+    const id = 'abcd-efgh-ijkl-mnop';
     const expectedArgs = { where: { id } };
 
     // Act

@@ -2,9 +2,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
   MaxLength,
   MinLength,
@@ -36,8 +34,7 @@ export class CreatePostDto {
   @IsOptional()
   published: boolean;
 
-  @IsPositive()
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  authorid: string;
+  authorId: string;
 }

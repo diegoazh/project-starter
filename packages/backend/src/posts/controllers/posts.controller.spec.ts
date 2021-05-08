@@ -48,7 +48,7 @@ describe('Posts Controller', () => {
 
   it('should call postsService.findById with provided args when receive a GET HTTP request on /posts/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     // Act
     await controller.findById(id);
@@ -79,7 +79,7 @@ describe('Posts Controller', () => {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque consectetur nunc mi, nec ullamcorper augue maximus id. Nam lacinia sapien.',
       published: true,
       type: PostType.TEXT,
-      authorId: 1,
+      authorId: 'abcd-efgh-ijkl-mnop',
     };
 
     // Act
@@ -92,7 +92,7 @@ describe('Posts Controller', () => {
 
   it('should call postsService.update with provided args when receive a PUT HTTP request on /posts/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
     const post: UpdatePostDto = {
       title:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eget.',
@@ -112,7 +112,7 @@ describe('Posts Controller', () => {
 
   it('should call postsService.updateProperty with provided args when receive a PATCH HTTP request on /posts/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
     const post: PatchPostDto = {
       published: false,
     };
@@ -127,7 +127,7 @@ describe('Posts Controller', () => {
 
   it('should call postsService.remove with provided args when receive a DELETE HTTP request on /posts/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     // Act
     await controller.remove(id);

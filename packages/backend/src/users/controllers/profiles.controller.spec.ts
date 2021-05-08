@@ -48,7 +48,7 @@ describe('Profiles Controller', () => {
 
   it('should call profilesService.findById with provided args when receive a GET HTTP request on /profiles/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     // Act
     await controller.findById(id);
@@ -63,7 +63,7 @@ describe('Profiles Controller', () => {
     const args = { where: { firstName: 'Alice' } };
 
     // Act
-    await controller.count(args);
+    await controller.count(args as any);
 
     // Assert
     expect(profilesService.count).toHaveBeenCalledTimes(1);
@@ -77,7 +77,7 @@ describe('Profiles Controller', () => {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tempor efficitur eros ut vulputate. Nam hendrerit ultrices interdum. Pellentesque ut lacinia lacus. Vestibulum rhoncus lectus velit, quis maximus tellus posuere.',
       firstName: 'John',
       lastName: 'Doe',
-      userId: 1,
+      userId: 'abcd-efgh-ijkl-mnop',
     };
 
     // Act
@@ -90,7 +90,7 @@ describe('Profiles Controller', () => {
 
   it('should call profilesService.update with provided args when receive a PUT HTTP request on /profiles/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
     const profile: UpdateProfileDto = {
       bio:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In metus massa, tincidunt vitae lorem eget, convallis luctus felis. Vivamus tempus risus eu tempus ultricies. Phasellus pretium mauris a tempus cursus.',
@@ -108,7 +108,7 @@ describe('Profiles Controller', () => {
 
   it('should call profilesService.updateProperty with provided args when receive a PATCH HTTP request on /profiles/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
     const profile: PatchProfileDto = {
       lastName: 'Smith',
     };
@@ -123,7 +123,7 @@ describe('Profiles Controller', () => {
 
   it('should call profilesService.remove with provided args when receive a DELETE HTTP request on /profiles/:id', async () => {
     // Arrange
-    const id = 1;
+    const id = 'abcd-efgh-ijkl-mnop';
 
     // Act
     await controller.remove(id);

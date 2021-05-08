@@ -66,7 +66,7 @@ describe('PostsService', () => {
     const args = { where: { published: true } };
 
     // Act
-    await service.count(args);
+    await service.count(args as any);
 
     // Assert
     expect(prisma.post.count).toHaveBeenCalledTimes(1);
@@ -84,7 +84,7 @@ describe('PostsService', () => {
       type: PostType.TEXT,
       authorId: 'abcd-efgh-ijkl-mnop',
     };
-    const expectedArgs = { data: { ...post, author: null } };
+    const expectedArgs = { data: { ...post } };
 
     // Act
     await service.create(post);

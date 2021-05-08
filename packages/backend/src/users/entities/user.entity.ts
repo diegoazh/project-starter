@@ -1,4 +1,6 @@
 import { User } from '@prisma/client';
+import { ValueOf } from 'src/shared/types/user.type';
+import { UserRole } from '../constants/user.constant';
 
 export class UserEntity implements User {
   id: string;
@@ -9,7 +11,7 @@ export class UserEntity implements User {
 
   username: string | null;
 
-  role: 'USER' | 'ADMIN';
+  role: ValueOf<typeof UserRole>;
 
   createdAt: Date;
 

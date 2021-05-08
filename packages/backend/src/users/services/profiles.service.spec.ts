@@ -66,7 +66,7 @@ describe('ProfilesService', () => {
     const args = { where: { lastName: 'Doe' } };
 
     // Act
-    await service.count(args);
+    await service.count(args as any);
 
     // Assert
     expect(prisma.profile.count).toHaveBeenCalledTimes(1);
@@ -80,7 +80,7 @@ describe('ProfilesService', () => {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tempor efficitur eros ut vulputate. Nam hendrerit ultrices interdum. Pellentesque ut lacinia lacus. Vestibulum rhoncus lectus velit, quis maximus tellus posuere.',
       firstName: 'John',
       lastName: 'Doe',
-      userId: 1,
+      userId: 'abcd-efgh-ijkl-mnop',
     };
     const expectedArgs = { data: { ...profile, user: null } };
 

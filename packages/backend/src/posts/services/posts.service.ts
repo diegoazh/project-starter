@@ -28,7 +28,7 @@ export class PostsService {
 
   create(data: CreatePostDto): Promise<Post> {
     return this.prisma.post.create({
-      data: { ...data, author: null },
+      data: { ...data },
     });
   }
 
