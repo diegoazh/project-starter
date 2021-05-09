@@ -82,7 +82,7 @@ describe('ProfilesService', () => {
       lastName: 'Doe',
       userId: 'abcd-efgh-ijkl-mnop',
     };
-    const expectedArgs = { data: { ...profile, user: null } };
+    const expectedArgs = { data: { ...profile } };
 
     // Act
     await service.create(profile);
