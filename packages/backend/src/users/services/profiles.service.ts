@@ -30,7 +30,7 @@ export class ProfilesService {
 
   create(data: CreateProfileDto): Promise<Profile> {
     return this.prisma.profile.create({
-      data: { ...data, user: null },
+      data: { ...data },
     });
   }
 

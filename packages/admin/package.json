@@ -1,19 +1,16 @@
 {
-  "name": "admin",
+  "name": "vuetify-material-dashboard",
   "version": "2.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve --open",
+    "start:dev": "vue-cli-service serve --open",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
-    "start:dev": "vue-cli-service serve",
-    "start:debug": "vue-cli-service serve",
-    "test": "yarn run test:unit && yarn run test:e2e",
+    "now-start": "vue-cli-service serve",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit",
-    "clean": "rimraf ./node_modules"
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "core-js": "^3.6.2",

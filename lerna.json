@@ -10,7 +10,7 @@
     "**/__tests__/**",
     "**/*.md"
   ],
-  "npmClient": "npm",
+  "npmClient": "yarn",
   "packages": [
     "packages/*"
   ],
