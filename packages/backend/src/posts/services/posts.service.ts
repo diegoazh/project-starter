@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindManyPostArgs, Post, Subset } from 'prisma';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
@@ -14,7 +14,13 @@ export class PostsService {
   }
 
   findById(id: string): Promise<Post> {
-    return this.prisma.post.findFirst({ where: { id } });
+    const postFounded = this.prisma.post.findFirst({ where: { id } });
+
+    if (!postFounded) {
+      throw new NotFoundException('any post was found');
+    }
+
+    return postFounded;
   }
 
   async count(
@@ -33,7 +39,7 @@ export class PostsService {
   }
 
   async update(id: string, data: UpdatePostDto): Promise<Post> {
-    const savedPost = await this.prisma.post.findFirst({ where: { id } });
+    const savedPost = await this.findById(id);
 
     return this.prisma.post.update({
       where: { id },
@@ -42,7 +48,7 @@ export class PostsService {
   }
 
   async updateProperty(id: string, post: PatchPostDto): Promise<Post> {
-    const savedPost = await this.prisma.post.findFirst({ where: { id } });
+    const savedPost = await this.findById(id);
 
     const mustBeUpdated = Object.keys(post).reduce((needsUpdate, property) => {
       if (savedPost[property] !== post[property]) {

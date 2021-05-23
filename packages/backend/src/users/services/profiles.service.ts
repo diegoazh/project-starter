@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindManyProfileArgs, Profile, Subset } from 'prisma';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateProfileDto } from '../dtos/create-profile.dto';
@@ -15,8 +15,16 @@ export class ProfilesService {
     return this.prisma.profile.findMany(query);
   }
 
-  findById(id: string): Promise<Profile> {
-    return this.prisma.profile.findFirst({ where: { id } });
+  async findById(id: string): Promise<Profile> {
+    const profileFound = await this.prisma.profile.findUnique({
+      where: { id },
+    });
+
+    if (!profileFound) {
+      throw new NotFoundException('any profile was found');
+    }
+
+    return profileFound;
   }
 
   count(
@@ -35,7 +43,7 @@ export class ProfilesService {
   }
 
   async update(id: string, data: UpdateProfileDto): Promise<Profile> {
-    const savedProfile = await this.prisma.profile.findFirst({ where: { id } });
+    const savedProfile = await this.findById(id);
 
     return this.prisma.profile.update({
       where: { id },
@@ -44,7 +52,7 @@ export class ProfilesService {
   }
 
   async updateProperty(id: string, profile: PatchProfileDto): Promise<Profile> {
-    const savedProfile = await this.prisma.profile.findFirst({ where: { id } });
+    const savedProfile = await this.findById(id);
 
     const mustBeUpdated = Object.keys(profile).reduce(
       (needsUpdate, property) => {

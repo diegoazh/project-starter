@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { User } from '@prisma/client';
 import { FindManyUserArgs, Subset } from 'prisma';
@@ -35,8 +35,14 @@ export class UsersService {
     });
   }
 
-  findById(id: string): Promise<User> {
-    return this.prisma.user.findFirst({ where: { id } });
+  async findById(id: string): Promise<User> {
+    const userFound = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!userFound) {
+      throw new NotFoundException('any user was found');
+    }
+
+    return userFound;
   }
 
   findOne(userData: UserWithoutPassword): Promise<User> {
@@ -61,7 +67,7 @@ export class UsersService {
   }
 
   async update(id: string, data: UpdateUserDto): Promise<User> {
-    const savedUser = await this.prisma.user.findFirst({ where: { id } });
+    const savedUser = await this.findById(id);
 
     return this.prisma.user.update({
       where: { id },
@@ -70,7 +76,7 @@ export class UsersService {
   }
 
   async updateProperty(id: string, user: PatchUserDto): Promise<User> {
-    const savedUser = await this.prisma.user.findFirst({ where: { id } });
+    const savedUser = await this.findById(id);
 
     const mustBeUpdated = Object.keys(user).reduce((needsUpdate, property) => {
       if (user[property] && savedUser[property] !== user[property]) {

@@ -9,6 +9,7 @@ const prismaServiceMock = {
   profile: {
     findMany: jest.fn(() => []),
     findFirst: jest.fn(() => ({})),
+    findUnique: jest.fn(() => ({})),
     count: jest.fn(() => 1),
     create: jest.fn(() => ({})),
     update: jest.fn(() => ({})),
@@ -36,7 +37,7 @@ describe('ProfilesService', () => {
     jest.clearAllMocks();
   });
 
-  it('should call prisma profile.finMany with arguments when call find method', async () => {
+  it('should call prisma.profile.finMany with arguments when call find method', async () => {
     // Arrange
     const args = { where: { id: 1 } };
 
@@ -48,7 +49,7 @@ describe('ProfilesService', () => {
     expect(prisma.profile.findMany).toHaveBeenCalledWith(args);
   });
 
-  it('should call prisma profile.findFirst with arguments when call findById method', async () => {
+  it('should call prisma.profile.findUnique with arguments when call findById method', async () => {
     // Arrange
     const id = 'abc-def-ghi';
     const expectedArgs = { where: { id } };
@@ -57,11 +58,11 @@ describe('ProfilesService', () => {
     await service.findById(id);
 
     // Assert
-    expect(prisma.profile.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.profile.findFirst).toHaveBeenCalledWith(expectedArgs);
+    expect(prisma.profile.findUnique).toHaveBeenCalledTimes(1);
+    expect(prisma.profile.findUnique).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma profile.count with arguments when call count method', async () => {
+  it('should call prisma.profile.count with arguments when call count method', async () => {
     // Arrange
     const args = { where: { lastName: 'Doe' } };
 
@@ -92,7 +93,7 @@ describe('ProfilesService', () => {
     expect(prisma.profile.create).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma profile.update with arguments and update all profile data when call update method', async () => {
+  it('should call prisma.profile.update with arguments and update all profile data when call update method', async () => {
     // Arrange
     const oldProfile = {
       id: 1,
@@ -116,18 +117,20 @@ describe('ProfilesService', () => {
       where: { id },
       data: { ...oldProfile, ...profile },
     };
-
-    (prisma.profile.findFirst as any).mockReturnValue(oldProfile);
+    jest.spyOn(service, 'findById');
+    (prisma.profile.findUnique as any).mockReturnValue(oldProfile);
 
     // Act
     await service.update(id, profile);
 
     // Assert
+    expect(service.findById).toHaveBeenCalledTimes(1);
+    expect(service.findById).toHaveBeenCalledWith(id);
     expect(prisma.profile.update).toHaveBeenCalledTimes(1);
     expect(prisma.profile.update).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma profile.update with arguments and update the passed properties of the profile data when call updateProperty method', async () => {
+  it('should call prisma.profile.update with arguments and update the passed properties of the profile data when call updateProperty method', async () => {
     // Arrange
     const oldProfile = {
       id: 1,
@@ -148,18 +151,20 @@ describe('ProfilesService', () => {
       where: { id },
       data: { ...oldProfile, ...profile },
     };
-
-    (prisma.profile.findFirst as any).mockReturnValue(oldProfile);
+    jest.spyOn(service, 'findById');
+    (prisma.profile.findUnique as any).mockReturnValue(oldProfile);
 
     // Act
     await service.updateProperty(id, profile);
 
     // Assert
+    expect(service.findById).toHaveBeenCalledTimes(1);
+    expect(service.findById).toHaveBeenCalledWith(id);
     expect(prisma.profile.update).toHaveBeenCalledTimes(1);
     expect(prisma.profile.update).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should not call prisma profile.update when any changes are sent to updateProperty method', async () => {
+  it('should not call prisma.profile.update when any changes are sent to updateProperty method', async () => {
     // Arrange
     const oldProfile = {
       id: 1,
@@ -176,17 +181,19 @@ describe('ProfilesService', () => {
       lastName: 'Doe',
     };
     const id = 'abcd-efgh-ijkl-mnop';
-
-    (prisma.profile.findFirst as any).mockReturnValue(oldProfile);
+    jest.spyOn(service, 'findById');
+    (prisma.profile.findUnique as any).mockReturnValue(oldProfile);
 
     // Act
     await service.updateProperty(id, profile);
 
     // Assert
+    expect(service.findById).toHaveBeenCalledTimes(1);
+    expect(service.findById).toHaveBeenCalledWith(id);
     expect(prisma.profile.update).not.toHaveBeenCalled();
   });
 
-  it('should call prisma profile.delete with arguments when call remove method', async () => {
+  it('should call prisma.profile.delete with arguments when call remove method', async () => {
     // Arrange
     const id = 'abc-def-ghi';
     const expectedArgs = { where: { id } };
