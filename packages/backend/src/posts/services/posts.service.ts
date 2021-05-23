@@ -13,8 +13,8 @@ export class PostsService {
     return this.prisma.post.findMany(query);
   }
 
-  findById(id: string): Promise<Post> {
-    const postFounded = this.prisma.post.findFirst({ where: { id } });
+  async findById(id: string): Promise<Post> {
+    const postFounded = await this.prisma.post.findUnique({ where: { id } });
 
     if (!postFounded) {
       throw new NotFoundException('any post was found');

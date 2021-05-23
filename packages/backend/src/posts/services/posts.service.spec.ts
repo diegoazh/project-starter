@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreatePostDto, PostType } from '../dtos/create-post.dto';
@@ -9,6 +10,7 @@ const prismaServiceMock = {
   post: {
     findMany: jest.fn(() => []),
     findFirst: jest.fn(() => ({})),
+    findUnique: jest.fn(() => ({})),
     count: jest.fn(() => 1),
     create: jest.fn(() => ({})),
     update: jest.fn(() => ({})),
@@ -36,7 +38,7 @@ describe('PostsService', () => {
     jest.clearAllMocks();
   });
 
-  it('should call prisma post.finMany with arguments when call find method', async () => {
+  it('should call prisma.post.finMany with arguments when call find method', async () => {
     // Arrange
     const args = { where: { id: 'abcd-efgh-ijkl-mnop' } };
 
@@ -48,7 +50,7 @@ describe('PostsService', () => {
     expect(prisma.post.findMany).toHaveBeenCalledWith(args);
   });
 
-  it('should call prisma post.findFirst with arguments when call findById method', async () => {
+  it('should call prisma.post.findUnique with arguments when call findById method', async () => {
     // Arrange
     const id = 'abcd-efgh-ijkl-mnop';
     const expectedArgs = { where: { id } };
@@ -57,11 +59,33 @@ describe('PostsService', () => {
     await service.findById(id);
 
     // Assert
-    expect(prisma.post.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.post.findFirst).toHaveBeenCalledWith(expectedArgs);
+    expect(prisma.post.findUnique).toHaveBeenCalledTimes(1);
+    expect(prisma.post.findUnique).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma post.count with arguments when call count method', async () => {
+  it('should throw a not found exception when call findById method and any post was found', async () => {
+    // Arrange
+    let errorThrown;
+    const id = 'abcd-efgh-ijkl-mnop';
+    const expectedArgs = { where: { id } };
+    jest
+      .spyOn(prismaServiceMock.post, 'findUnique')
+      .mockImplementationOnce(() => Promise.resolve(null));
+
+    // Act
+    try {
+      await service.findById(id);
+    } catch (error) {
+      errorThrown = error;
+    }
+
+    // Assert
+    expect(prisma.post.findUnique).toHaveBeenCalledTimes(1);
+    expect(prisma.post.findUnique).toHaveBeenCalledWith(expectedArgs);
+    expect(errorThrown).toBeInstanceOf(NotFoundException);
+  });
+
+  it('should call prisma.post.count with arguments when call count method', async () => {
     // Arrange
     const args = { where: { published: true } };
 
@@ -73,7 +97,7 @@ describe('PostsService', () => {
     expect(prisma.post.count).toHaveBeenCalledWith(args);
   });
 
-  it('should call prisma post.create with arguments when call create method', async () => {
+  it('should call prisma.post.create with arguments when call create method', async () => {
     // Arrange
     const post: CreatePostDto = {
       title:
@@ -94,7 +118,7 @@ describe('PostsService', () => {
     expect(prisma.post.create).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma post.update with arguments and update all post data when call update method', async () => {
+  it('should call prisma.post.update with arguments and update all post data when call update method', async () => {
     // Arrange
     const oldPost = {
       title:
@@ -119,18 +143,20 @@ describe('PostsService', () => {
       where: { id },
       data: { ...oldPost, ...post },
     };
-
-    (prisma.post.findFirst as any).mockReturnValue(oldPost);
+    jest.spyOn(service, 'findById');
+    (prisma.post.findUnique as any).mockReturnValue(oldPost);
 
     // Act
     await service.update(id, post);
 
     // Assert
+    expect(service.findById).toHaveBeenCalledTimes(1);
+    expect(service.findById).toHaveBeenCalledWith(id);
     expect(prisma.post.update).toHaveBeenCalledTimes(1);
     expect(prisma.post.update).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma post.update with arguments and update the passed properties of the post data when call updateProperty method', async () => {
+  it('should call prisma.post.update with arguments and update the passed properties of the post data when call updateProperty method', async () => {
     // Arrange
     const oldPost = {
       title:
@@ -150,18 +176,20 @@ describe('PostsService', () => {
       where: { id },
       data: { ...oldPost, ...post },
     };
-
-    (prisma.post.findFirst as any).mockReturnValue(oldPost);
+    jest.spyOn(service, 'findById');
+    (prisma.post.findUnique as any).mockReturnValue(oldPost);
 
     // Act
     await service.updateProperty(id, post);
 
     // Assert
+    expect(service.findById).toHaveBeenCalledTimes(1);
+    expect(service.findById).toHaveBeenCalledWith(id);
     expect(prisma.post.update).toHaveBeenCalledTimes(1);
     expect(prisma.post.update).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma post.update with arguments and not update the post data when call updateProperty method with empty data', async () => {
+  it('should call prisma.post.update with arguments and not update the post data when call updateProperty method with empty data', async () => {
     // Arrange
     const oldPost = {
       title:
@@ -176,17 +204,19 @@ describe('PostsService', () => {
       title: '',
     };
     const id = 'abcd-efgh-ijkl-mnop';
-
-    (prisma.post.findFirst as any).mockReturnValue(oldPost);
+    jest.spyOn(service, 'findById');
+    (prisma.post.findUnique as any).mockReturnValue(oldPost);
 
     // Act
     await service.updateProperty(id, post);
 
     // Assert
+    expect(service.findById).toHaveBeenCalledTimes(1);
+    expect(service.findById).toHaveBeenCalledWith(id);
     expect(prisma.post.update).not.toHaveBeenCalled();
   });
 
-  it('should call prisma post.update with arguments and set an empty content when call updateProperty method', async () => {
+  it('should call prisma.post.update with arguments and set an empty content when call updateProperty method', async () => {
     // Arrange
     const oldPost = {
       title:
@@ -208,18 +238,20 @@ describe('PostsService', () => {
       where: { id },
       data: { ...oldPost, ...post },
     };
-
-    (prisma.post.findFirst as any).mockReturnValue(oldPost);
+    jest.spyOn(service, 'findById');
+    (prisma.post.findUnique as any).mockReturnValue(oldPost);
 
     // Act
     await service.updateProperty(id, post);
 
     // Assert
+    expect(service.findById).toHaveBeenCalledTimes(1);
+    expect(service.findById).toHaveBeenCalledWith(id);
     expect(prisma.post.update).toHaveBeenCalledTimes(1);
     expect(prisma.post.update).toHaveBeenCalledWith(expectedArgs);
   });
 
-  it('should call prisma post.delete with arguments when call remove method', async () => {
+  it('should call prisma.post.delete with arguments when call remove method', async () => {
     // Arrange
     const id = 'abcd-efgh-ijkl-mnop';
     const expectedArgs = { where: { id } };

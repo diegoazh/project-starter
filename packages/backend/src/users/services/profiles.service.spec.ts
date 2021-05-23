@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { CreateProfileDto } from '../dtos/create-profile.dto';
@@ -60,6 +61,28 @@ describe('ProfilesService', () => {
     // Assert
     expect(prisma.profile.findUnique).toHaveBeenCalledTimes(1);
     expect(prisma.profile.findUnique).toHaveBeenCalledWith(expectedArgs);
+  });
+
+  it('should throw a not found exception when call findById method and any profile was found', async () => {
+    // Arrange
+    let errorThrown;
+    const id = 'abc-def-ghi';
+    const expectedArgs = { where: { id } };
+    jest
+      .spyOn(prismaServiceMock.profile, 'findUnique')
+      .mockImplementationOnce(() => Promise.resolve(null));
+
+    // Act
+    try {
+      await service.findById(id);
+    } catch (error) {
+      errorThrown = error;
+    }
+
+    // Assert
+    expect(prisma.profile.findUnique).toHaveBeenCalledTimes(1);
+    expect(prisma.profile.findUnique).toHaveBeenCalledWith(expectedArgs);
+    expect(errorThrown).toBeInstanceOf(NotFoundException);
   });
 
   it('should call prisma.profile.count with arguments when call count method', async () => {
