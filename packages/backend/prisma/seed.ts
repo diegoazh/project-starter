@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies -- is only used to seed the DB
-import * as faker from 'faker';
+import faker from 'faker';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();

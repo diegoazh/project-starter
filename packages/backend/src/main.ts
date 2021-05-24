@@ -2,7 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as helmet from 'helmet';
+import helmet from 'helmet';
 import { version } from '../package.json';
 import { AppModule } from './app.module';
 
