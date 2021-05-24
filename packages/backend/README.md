@@ -24,11 +24,11 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Test coverage
+## Coverage
 
 | Statements | Branches | Functions | Lines |
 | -----------|----------|-----------|-------|
-| ![Statements](https://img.shields.io/badge/Coverage-99%25-brightgreen.svg "Make me better!") | ![Branches](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg "Make me better!") | ![Functions](https://img.shields.io/badge/Coverage-98.18%25-brightgreen.svg "Make me better!") | ![Lines](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg "Make me better!") |
+| ![Statements](https://img.shields.io/badge/Coverage-96.94%25-brightgreen.svg "Make me better!") | ![Branches](https://img.shields.io/badge/Coverage-86.96%25-yellow.svg "Make me better!") | ![Functions](https://img.shields.io/badge/Coverage-93.15%25-brightgreen.svg "Make me better!") | ![Lines](https://img.shields.io/badge/Coverage-96.65%25-brightgreen.svg "Make me better!") |
 
 ## Description
 

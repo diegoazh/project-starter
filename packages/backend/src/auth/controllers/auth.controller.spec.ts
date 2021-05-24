@@ -15,11 +15,14 @@ const usersServiceMock = {
   cleanUsers: jest.fn(() => ({})),
 };
 
-const authServiceMock = {};
+const authServiceMock = {
+  login: jest.fn(() => ({ access_token: 'abcdefghi' })),
+};
 
 describe('Auth Controller', () => {
   let controller: AuthController;
   let usersService: UsersService;
+  let authService: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,6 +35,28 @@ describe('Auth Controller', () => {
 
     controller = module.get<AuthController>(AuthController);
     usersService = module.get<UsersService>(UsersService);
+    authService = module.get<AuthService>(AuthService);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should call authService.login when a user is logged in', async () => {
+    // Arrange
+    const credentials = { email: 'test@test.com', password: '123456' };
+    const request = {
+      user: { email: 'test@test.com', password: '123456', username: 'test' },
+    };
+    const expectedResult = { access_token: 'abcdefghi' };
+
+    // Act
+    const result = controller.login(credentials, request as any);
+
+    // Assert
+    expect(result).toEqual(expectedResult);
+    expect(authService.login).toHaveBeenCalledTimes(1);
+    expect(authService.login).toHaveBeenCalledWith(request.user);
   });
 
   it('should call usersService.create with provided args when receive a POST HTTP request on /users', async () => {

@@ -46,7 +46,7 @@ export class UsersController {
   @Get('count')
   async count(
     @Query()
-    query: Pick<
+    query?: Pick<
       FindManyUserArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,

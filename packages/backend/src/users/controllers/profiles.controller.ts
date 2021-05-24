@@ -48,7 +48,7 @@ export class ProfilesController {
   @Get('count')
   async count(
     @Query()
-    query: Pick<
+    query?: Pick<
       FindManyProfileArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,

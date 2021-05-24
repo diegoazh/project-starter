@@ -46,7 +46,7 @@ export class PostsController {
   @Get('count')
   async count(
     @Query()
-    query: Pick<
+    query?: Pick<
       FindManyPostArgs,
       'where' | 'orderBy' | 'cursor' | 'take' | 'skip' | 'distinct'
     >,
